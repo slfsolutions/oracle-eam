@@ -2,6 +2,11 @@
   "name": "oracle-eam",
   "version": "1.0.0",
   "description": "Oracle eAM",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slfsolutions/oracle-eam.git"
+  },
   "author": "Grant Fortington",
   "scripts": {
     "start": "node ./bin/www",
