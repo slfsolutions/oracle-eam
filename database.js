@@ -24,12 +24,12 @@ module.exports.executeCommand = function(request, command, callback) {
     }
     command(request, connection, function(error, result) {
       if (error) {
-        callback(error);
         closeConnection(connection);
+        callback(error);
         return;
       }
-      callback(null, result);
       closeConnection(connection);
+      callback(null, result);
     });
   });
 };

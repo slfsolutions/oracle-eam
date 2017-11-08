@@ -57,7 +57,6 @@ const fields = [
   {name: 'parent_asset_group_description', column: 'asgr_p.description'},
   {name: 'location_type_code', column: 'asst.location_type_code'},
   {name: 'location_id', column: 'asst.location_id', type: oracledb.NUMBER},
-  {name: 'location_type_code', column: 'asst.location_type_code'},
   {name: 'location_code', column: 'asst.location_code'},
   {name: 'location_address', column: 'asst.location_address'},
   {name: 'prod_equip_object_id', column: 'asst.prod_equip_object_id', type: oracledb.NUMBER},
