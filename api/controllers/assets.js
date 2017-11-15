@@ -130,7 +130,7 @@ module.exports.list = function(request, response, next) {
   });
 }; /* END list */
 
-// Helper function to be used by create, update etc...
+// Helper function that can also be used by create, update etc...
 function detail(asset_id, response) {
   const config = {
     sql: library.getQueryStatement(
