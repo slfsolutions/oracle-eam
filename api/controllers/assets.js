@@ -1,5 +1,5 @@
 const oracledb = require('oracledb');
-const library = require('./library');
+const controllers = require('./_library');
 
 /*
 * URI query field / (reporting) object mappings
@@ -106,59 +106,27 @@ const fromClause =
   '         LEFT JOIN apps.xeam_asset_groups_v asgr_p ON asgr_p.organization_id = asst_p.organization_id AND asgr_p.asset_group_id = asst_p.asset_group_id\n' +
   ' WHERE   NVL(asst.network_asset_flag, \'N\') = \'N\'\n';
 
+const fromClauseWithKey = fromClause +
+  ' AND     asst.asset_id = :asset_id\n';
+
 /*
 * Controllers
 */
 
 module.exports.list = function(request, response, next) {
-  const config = {
-    sql: library.getQueryStatement(
-      library.getQueryComponents(request.query, fields),
-      fromClause
-    ),
-    bindParams: {},
-    options: {
-      outFormat: oracledb.OBJECT
-    }
-  };
-  library.process(config, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    response.json(result.rows);
-  });
+  const keys = {};
+  controllers.list(request.query, fields, fromClause, keys, response);
 }; /* END list */
 
-// Helper function that can also be used by create, update etc...
-function detail(asset_id, response) {
-  const config = {
-    sql: library.getQueryStatement(
-      {columnsList: library.getColumnsList(fields)},
-      fromClause + ' AND     asst.asset_id = :asset_id\n'
-    ),
-    bindParams: {
-      asset_id: asset_id
-    },
-    options: {
-      outFormat: oracledb.OBJECT
-    }
-  };
-  library.process(config, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    response.json(result.rows[0]);
-  });
-};
-
 module.exports.detail = function(request, response, next) {
-  detail(request.params.asset_id, response);
+  const keys = {
+    asset_id: parseInt(request.params.asset_id)
+  };
+  controllers.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */
 
 module.exports.create = function(request, response, next) {
-  const config = {
+  const statement = {
     sql:
       ' BEGIN\n' +
       '   apps.xeam_asset_pkg.process_asset(\n' +
@@ -216,21 +184,16 @@ module.exports.create = function(request, response, next) {
     },
     options: {}
   };
-  library.process(config, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    if (result.outBinds.return_status != 'S') {
-      response.json(result.outBinds);
-      return;
-    }
-    detail(result.outBinds.asset_id, response);
-  });
+  const getKeys = function(initial, result) {
+    return {
+      asset_id: result.asset_id
+    };
+  };
+  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END create */
 
 module.exports.update = function(request, response, next) {
-  const config = {
+  const statement = {
     sql:
       ' BEGIN\n' +
       '   apps.xeam_asset_pkg.process_asset(\n' +
@@ -292,21 +255,16 @@ module.exports.update = function(request, response, next) {
     },
     options: {}
   };
-  library.process(config, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    if (result.outBinds.return_status != 'S') {
-      response.json(result.outBinds);
-      return;
-    }
-    detail(request.params.asset_id, response);
-  });
+  const getKeys = function(initial, result) {
+    return {
+      asset_id: parseInt(initial.asset_id)
+    };
+  };
+  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END update */
 
 module.exports.deactivate = function(request, response, next) {
-  const config = {
+  const statement = {
     sql:
       ' BEGIN\n' +
       '   apps.xeam_asset_pkg.deactivate_asset(\n' +
@@ -323,17 +281,12 @@ module.exports.deactivate = function(request, response, next) {
     },
     options: {}
   };
-  library.process(config, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    if (result.outBinds.return_status != 'S') {
-      response.json(result.outBinds);
-      return;
-    }
-    detail(request.params.asset_id, response);
-  });
+  const getKeys = function(initial, result) {
+    return {
+      asset_id: parseInt(initial.asset_id)
+    };
+  };
+  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END deactivate */
 
 module.exports.hierarchy = function(request, response, next) {

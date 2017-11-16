@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var assets = require('./api/routes/assets');
+var organizations = require('./api/routes/organizations');
 
 var app = express();
 
@@ -9,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api/assets', assets);
+app.use('/api/organizations', organizations);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

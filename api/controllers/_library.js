@@ -11,9 +11,7 @@ function getColumnsList(fields) {
   return columnsList;
 }; // END getColumnsList
 
-module.exports.getColumnsList = getColumnsList;
-
-module.exports.getQueryComponents = function(parameters, fields) {
+function getQueryComponents(parameters, fields) {
   let queryComponents = {};
 
   // Generate SELECT clause columns list
@@ -96,7 +94,7 @@ module.exports.getQueryComponents = function(parameters, fields) {
   return queryComponents;
 }; // END getQueryComponents
 
-module.exports.getQueryStatement = function(queryComponents, fromClause) {
+function getQueryStatement(queryComponents, fromClause) {
   let queryStatement = '';
 
   for (i = 0; i < queryComponents.columnsList.length; i++)
@@ -121,13 +119,13 @@ module.exports.getQueryStatement = function(queryComponents, fromClause) {
   return queryStatement;
 } // END getQueryStatement
 
-module.exports.process = function(config, callback) {
+function executeStatement(statement, callback) {
   oracledb.getConnection(database.connectionAttributes, function(error, connection) {
     if (error) {
       callback(error);
       return;
     }
-    connection.execute(config.sql, config.bindParams, config.options, function(error, result) {
+    connection.execute(statement.sql, statement.bindParams, statement.options, function(error, result) {
       if (error) {
         callback(error);
         database.closeConnection(connection);
@@ -137,4 +135,66 @@ module.exports.process = function(config, callback) {
       database.closeConnection(connection);
     });
   });
-}; // END process
+}; // END executeStatement
+
+module.exports.list = function(parameters, fields, fromClause, keys, response) {
+  const statement = {
+    sql: getQueryStatement(
+      getQueryComponents(parameters, fields),
+      fromClause
+    ),
+    bindParams: keys,
+    options: {
+      outFormat: oracledb.OBJECT
+    }
+  };
+  executeStatement(statement, function(error, result) {
+    if (error) {
+      console.error(error.message);
+      return;
+    }
+    response.json(result.rows);
+  });
+}; // END list
+
+function detail(fields, fromClauseWithKey, keys, response) {
+  const statement = {
+    sql: getQueryStatement(
+      {columnsList: getColumnsList(fields)},
+      fromClauseWithKey
+    ),
+    bindParams: keys,
+    options: {
+      outFormat: oracledb.OBJECT
+    }
+  };
+  executeStatement(statement, function(error, result) {
+    if (error) {
+      console.error(error.message);
+      return;
+    }
+    response.json(result.rows[0]);
+  });
+}; // END detail
+
+module.exports.detail = detail;
+
+module.exports.compound = function(statement, fields, fromClauseWithKey, getKeys, response) {
+  executeStatement(statement, function(error, result) {
+    if (error) {
+      console.error(error.message);
+      return;
+    }
+    if (result.outBinds.return_status != 'S') {
+      response.json(result.outBinds);
+      return;
+    }
+    //console.log(getKeys(statement.bindParams, result.outBinds));
+    detail(
+      fields,
+      fromClauseWithKey,
+      getKeys(statement.bindParams, result.outBinds),
+      response
+    );
+  });
+}; // END compound
