@@ -145,6 +145,7 @@ module.exports.list = function(parameters, fields, fromClause, keys, response) {
     ),
     bindParams: keys,
     options: {
+      maxRows: 99999, // Overrides default of 100! Make configurable?
       outFormat: oracledb.OBJECT
     }
   };

@@ -1,16 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 
-var assets = require('./api/routes/assets');
-var organizations = require('./api/routes/organizations');
-
 var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/api/assets', assets);
-app.use('/api/organizations', organizations);
+app.use('/api/asset_areas', require('./api/routes/asset_areas'));
+app.use('/api/asset_categories', require('./api/routes/asset_categories'));
+app.use('/api/organizations', require('./api/routes/asset_groups'));
+app.use('/api/assets', require('./api/routes/assets'));
+app.use('/api/departments', require('./api/routes/departments'));
+app.use('/api/organizations', require('./api/routes/organizations'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
