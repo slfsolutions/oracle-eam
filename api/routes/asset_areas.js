@@ -1,8 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const controllers = require('../controllers/asset_areas');
+const router = require('express').Router();
+const controller = require('../controllers/asset_areas');
 
-router.get('/', controllers.list);
-router.get('/:area_id', controllers.detail);
+router.get('/', controller.list);
+router.get('/:area_id', controller.detail);
 
 module.exports = router;

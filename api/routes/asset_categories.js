@@ -1,8 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const controllers = require('../controllers/asset_categories');
+const router = require('express').Router();
+const controller = require('../controllers/asset_categories');
 
-router.get('/', controllers.list);
-router.get('/:category_id', controllers.detail);
+router.get('/', controller.list);
+router.get('/:category_id', controller.detail);
 
 module.exports = router;

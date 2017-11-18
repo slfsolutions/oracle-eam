@@ -6,12 +6,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/api/asset_areas', require('./api/routes/asset_areas'));
-app.use('/api/asset_categories', require('./api/routes/asset_categories'));
-app.use('/api/organizations', require('./api/routes/asset_groups'));
-app.use('/api/assets', require('./api/routes/assets'));
-app.use('/api/departments', require('./api/routes/departments'));
-app.use('/api/organizations', require('./api/routes/organizations'));
+app.use('/api', require('./api/routes'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

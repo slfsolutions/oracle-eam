@@ -1,5 +1,5 @@
 const oracledb = require('oracledb');
-const controllers = require('./_library');
+const controller = require('./_library');
 
 /*
 * URI query field / (reporting) object mappings
@@ -115,14 +115,14 @@ const fromClauseWithKey = fromClause +
 
 module.exports.list = function(request, response, next) {
   const keys = {};
-  controllers.list(request.query, fields, fromClause, keys, response);
+  controller.list(request.query, fields, fromClause, keys, response);
 }; /* END list */
 
 module.exports.detail = function(request, response, next) {
   const keys = {
     asset_id: parseInt(request.params.asset_id)
   };
-  controllers.detail(fields, fromClauseWithKey, keys, response);
+  controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */
 
 module.exports.create = function(request, response, next) {
@@ -189,7 +189,7 @@ module.exports.create = function(request, response, next) {
       asset_id: result.asset_id
     };
   };
-  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END create */
 
 module.exports.update = function(request, response, next) {
@@ -260,7 +260,7 @@ module.exports.update = function(request, response, next) {
       asset_id: parseInt(initial.asset_id)
     };
   };
-  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END update */
 
 module.exports.deactivate = function(request, response, next) {
@@ -286,7 +286,7 @@ module.exports.deactivate = function(request, response, next) {
       asset_id: parseInt(initial.asset_id)
     };
   };
-  controllers.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END deactivate */
 
 module.exports.hierarchy = function(request, response, next) {
