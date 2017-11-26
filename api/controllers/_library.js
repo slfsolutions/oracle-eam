@@ -5,7 +5,7 @@ function getColumnsList(fields) {
   let columnsList = [];
   for (i = 0; i < fields.length; i++)
     columnsList.push(
-      fields[i].object.alias + '.' + fields[i].object.column +
+      (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
       ' AS ' + '"' + fields[i].name + '"'
     );
   return columnsList;
@@ -23,7 +23,7 @@ function getQueryComponents(parameters, fields) {
       for (j = 0; j < fields.length; j++)
         if (fields[j].name == includeFields[i]) {
           columnsList.push(
-            fields[j].object.alias + '.' + fields[j].object.column +
+            (fields[j].object.alias ? fields[j].object.alias + '.' : '') + fields[j].object.column +
             ' AS ' + '"' + fields[j].name + '"'
           );
           break;
@@ -39,16 +39,16 @@ function getQueryComponents(parameters, fields) {
     if (parameters[fields[i].name])
       if (parameters[fields[i].name] == 'null' || parameters[fields[i].name] == '!null')
         whereConditions.push(
-          fields[i].object.alias + '.' + fields[i].object.column +
+          (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
           ' IS ' + (parameters[fields[i].name].substr(0, 1) == '!' ? 'NOT ' : '') + 'NULL'
         );
       else
         whereConditions.push(
           (fields[i].object.type || oracledb.STRING) == oracledb.STRING
             ? 'UPPER(' +
-              fields[i].object.alias + '.' + fields[i].object.column +
+              (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
               ') LIKE UPPER(\'' + parameters[fields[i].name].replace(/\*/g, '%') + '\')'
-            : fields[i].object.alias + '.' + fields[i].object.column +
+            : (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
               ' = ' + parameters[fields[i].name]
         );
   if (whereConditions.length > 0)
@@ -71,7 +71,7 @@ function getQueryComponents(parameters, fields) {
       for (j = 0; j < fields.length; j++)
         if (fields[j].name == sortField) {
           orderByColumns.push(
-            fields[j].object.alias + '.' + fields[j].object.column +
+            (fields[j].object.alias ? fields[j].object.alias + '.' : '') + fields[j].object.column +
             (isDescending ? ' DESC' : '')
           );
           break;
@@ -120,6 +120,7 @@ function getQueryStatement(queryComponents, fromClause) {
 } // END getQueryStatement
 
 function executeStatement(statement, callback) {
+  console.log(statement);
   oracledb.getConnection(database.connectionAttributes, function(error, connection) {
     if (error) {
       callback(error);
@@ -190,7 +191,6 @@ module.exports.compound = function(statement, fields, fromClauseWithKey, getKeys
       response.json(result.outBinds);
       return;
     }
-    //console.log(getKeys(statement.bindParams, result.outBinds));
     detail(
       fields,
       fromClauseWithKey,

@@ -14,6 +14,12 @@ const fields = [
   {name: 'asset_group_id', object: {alias: 'asgr', column: 'asset_group_id', type: oracledb.NUMBER}},
   {name: 'asset_group', object: {alias: 'asgr', column: 'asset_group'}},
   {name: 'description', object: {alias: 'asgr', column: 'description'}},
+  {name: 'template_id', object: {alias: 'asgr', column: 'template_id', type: oracledb.NUMBER}},
+  {name: 'template', object: {alias: 'asgr', column: 'template'}},
+  {name: 'serial_generation_code', object: {alias: 'asgr', column: 'serial_generation_code', type: oracledb.NUMBER}},
+  {name: 'serial_generation', object: {alias: 'asgr', column: 'serial_generation'}},
+  {name: 'starting_prefix', object: {alias: 'asgr', column: 'starting_prefix'}},
+  {name: 'starting_number', object: {alias: 'asgr', column: 'starting_number', type: oracledb.NUMBER}},
 ]; // END fields
 
 /*
