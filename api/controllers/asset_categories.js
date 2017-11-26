@@ -6,15 +6,15 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'category_id', object: {alias: 'asca', column: 'category_id', type: oracledb.NUMBER}},
-  {name: 'category', object: {alias: 'asca', column: 'category'}},
-  {name: 'class', object: {alias: 'asca', column: 'class'}},
-  {name: 'subclass', object: {alias: 'asca', column: 'subclass'}},
-  {name: 'description', object: {alias: 'asca', column: 'description'}},
-  {name: 'enabled_flag', object: {alias: 'asca', column: 'enabled_flag'}},
-  {name: 'inactive_on', object: {alias: 'asca', column: 'inactive_on', type: oracledb.DATE}},
-  {name: 'start_date_active', object: {alias: 'asca', column: 'start_date_active', type: oracledb.DATE}},
-  {name: 'end_date_active', object: {alias: 'asca', column: 'end_date_active', type: oracledb.DATE}},
+  {name: 'category_id', object: {column: 'category_id', type: oracledb.NUMBER}},
+  {name: 'category', object: {column: 'category'}},
+  {name: 'class', object: {column: 'class'}},
+  {name: 'subclass', object: {column: 'subclass'}},
+  {name: 'description', object: {column: 'description'}},
+  {name: 'enabled_flag', object: {column: 'enabled_flag'}},
+  {name: 'inactive_on', object: {column: 'inactive_on', type: oracledb.DATE}},
+  {name: 'start_date_active', object: {column: 'start_date_active', type: oracledb.DATE}},
+  {name: 'end_date_active', object: {column: 'end_date_active', type: oracledb.DATE}},
 ]; // END fields
 
 /*
@@ -22,11 +22,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.xeam_asset_categories_v asca\n' +
+  ' FROM    apps.xeam_asset_categories_v\n' +
   ' WHERE   1 = 1\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     asca.category_id = :category_id\n';
+  ' AND     category_id = :category_id\n';
 
 /*
 * Controllers
