@@ -8,5 +8,6 @@ router.use('/asset_types', require('./asset_types'));
 router.use('/assets', require('./assets'));
 router.use('/departments', require('./departments'));
 router.use('/organizations', require('./organizations'));
+router.use('/query', require('./query'));
 
 module.exports = router;
