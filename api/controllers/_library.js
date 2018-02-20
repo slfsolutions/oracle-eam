@@ -120,7 +120,7 @@ function getQueryStatement(queryComponents, fromClause) {
 } // END getQueryStatement
 
 function executeStatement(statement, callback) {
-  console.log(statement);
+  //console.log(statement);
   oracledb.getConnection(database.connectionAttributes, function(error, connection) {
     if (error) {
       callback(error);

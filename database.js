@@ -5,7 +5,7 @@ const config = require('./config')[environment].database;
 module.exports.connectionAttributes = {
     user: config.username,
     password: config.password,
-    connectString: config.hostname + ':' + config.port + '/' + config.sid
+    connectString: config.hostname + ':' + config.port + '/' + config.serviceName
   };
 
 module.exports.closeConnection = function(connection) {

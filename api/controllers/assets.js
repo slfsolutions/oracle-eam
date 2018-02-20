@@ -290,7 +290,49 @@ module.exports.deactivate = function(request, response, next) {
 }; /* END deactivate */
 
 module.exports.hierarchy = function(request, response, next) {
+  const fields = [
+    {name: 'organization_id', object: {alias: 'ashi', column: 'organization_id', type: oracledb.NUMBER}},
+    {name: 'organization', object: {alias: 'ashi', column: 'organization'}},
+    {name: 'level_number', object: {alias: 'ashi', column: 'level_number', type: oracledb.NUMBER}},
+    {name: 'asset_id', object: {alias: 'ashi', column: 'asset_id', type: oracledb.NUMBER}},
+    {name: 'asset_type', object: {alias: 'ashi', column: 'asset_type'}},
+    {name: 'asset_number', object: {alias: 'ashi', column: 'asset_number'}},
+    {name: 'parent_asset_number', object: {alias: 'ashi', column: 'parent_asset_number'}},
+    {name: 'asset_path', object: {alias: 'ashi', column: 'asset_path'}},
+    {name: 'asset_description', object: {alias: 'ashi', column: 'asset_description'}},
+    {name: 'asset_object_id', object: {alias: 'ashi', column: 'asset_object_id', type: oracledb.NUMBER}},
+    {name: 'asset_order', object: {alias: 'ashi', column: 'asset_order', type: oracledb.NUMBER}},
+  ]; // END fields
+  const fromClause =
+  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_hierarchy_tf(:asset_id)) ashi\n' +
+  ' WHERE   1 = 1\n';
+  const keys = {
+    asset_id: parseInt(request.params.asset_id)
+  };
+  controller.list(request.query, fields, fromClause, keys, response);
 }; /* END hierarchy */
 
 module.exports.ancestry = function(request, response, next) {
+  const fields = [
+    {name: 'organization_id', object: {alias: 'asan', column: 'organization_id', type: oracledb.NUMBER}},
+    {name: 'organization', object: {alias: 'asan', column: 'organization'}},
+    {name: 'asset_id', object: {alias: 'asan', column: 'asset_id', type: oracledb.NUMBER}},
+    {name: 'asset_type', object: {alias: 'asan', column: 'asset_type'}},
+    {name: 'asset_number', object: {alias: 'asan', column: 'asset_number'}},
+    {name: 'asset_description', object: {alias: 'asan', column: 'asset_description'}},
+    {name: 'asset_object_id', object: {alias: 'asan', column: 'asset_object_id', type: oracledb.NUMBER}},
+    {name: 'ancestor_asset_id', object: {alias: 'asan', column: 'ancestor_asset_id', type: oracledb.NUMBER}},
+    {name: 'ancestor_asset_type', object: {alias: 'asan', column: 'ancestor_asset_type'}},
+    {name: 'ancestor_asset_number', object: {alias: 'asan', column: 'ancestor_asset_number'}},
+    {name: 'ancestor_asset_description', object: {alias: 'asan', column: 'ancestor_asset_description'}},
+    {name: 'ancestor_asset_object_id', object: {alias: 'asan', column: 'ancestor_asset_object_id', type: oracledb.NUMBER}},
+    {name: 'relation_level', object: {alias: 'asan', column: 'relation_level', type: oracledb.NUMBER}},
+  ]; // END fields
+  const fromClause =
+  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_ancestry_tf(:asset_id)) asan\n' +
+  ' WHERE   1 = 1\n';
+  const keys = {
+    asset_id: parseInt(request.params.asset_id)
+  };
+  controller.list(request.query, fields, fromClause, keys, response);
 }; /* END ancestry */

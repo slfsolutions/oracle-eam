@@ -5,7 +5,7 @@ module.exports = {
       password: '********',
       hostname: 'x.x.x.x',
       port: '1521',
-      sid: 'EBSDB'
+      serviceName: 'EBSDB'
     }
   }
 }
