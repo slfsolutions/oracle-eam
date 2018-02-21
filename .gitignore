@@ -1,2 +1,4 @@
 node_modules/
 config.js
+package-heroku.json
+package-local.json
