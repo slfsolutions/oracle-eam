@@ -27,9 +27,10 @@ module.exports.list = function(request, response, next) {
     fields.push(field);
   }
   const fromClause =
-    ' FROM   (\n' +
+    ' FROM    (\n' +
     request.body.statement + '\n' +
-    ' )\n';
-  const keys = {};
+    ' )\n' +
+    ' WHERE   1 = 1\n';
+    const keys = {};
   controller.list(request.query, fields, fromClause, keys, response);
 }; /* END list */
