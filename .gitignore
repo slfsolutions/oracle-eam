@@ -1,3 +1,2 @@
 node_modules/
-package-heroku.json
-package-local.json
+package-oracledb.json
