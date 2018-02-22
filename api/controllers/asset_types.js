@@ -6,7 +6,7 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'asset_type_code', object: {column: 'lookup_type'}},
+  {name: 'asset_type_code', object: {column: 'lookup_code'}},
   {name: 'asset_type', object: {column: 'meaning'}},
   {name: 'description', object: {column: 'description'}},
 ]; // END fields
