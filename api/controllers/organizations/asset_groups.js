@@ -19,7 +19,7 @@ const fields = [
   {name: 'serial_generation_code', object: {alias: 'asgr', column: 'serial_generation_code', type: oracledb.NUMBER}},
   {name: 'serial_generation', object: {alias: 'asgr', column: 'serial_generation'}},
   {name: 'starting_prefix', object: {alias: 'asgr', column: 'starting_prefix'}},
-  {name: 'starting_number', object: {alias: 'asgr', column: 'starting_number', type: oracledb.NUMBER}},
+  {name: 'starting_number', object: {alias: 'asgr', column: 'starting_number'}},
 ]; // END fields
 
 /*
