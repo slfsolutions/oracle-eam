@@ -6,7 +6,7 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'criticality_code', object: {column: 'lookup_code'}},
+  {name: 'criticality_code', object: {column: 'code'}},
   {name: 'criticality', object: {column: 'meaning'}},
   {name: 'description', object: {column: 'description'}},
 ]; // END fields
@@ -16,11 +16,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.fnd_lookup_values\n' +
+  ' FROM    apps.xeam_lookup_values_v\n' +
   ' WHERE   lookup_type = \'MTL_EAM_ASSET_CRITICALITY\'\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     lookup_code = :criticality_code\n';
+  ' AND     code = :criticality_code\n';
 
 /*
 * Controllers

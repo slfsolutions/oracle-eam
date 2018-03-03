@@ -6,8 +6,8 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'asset_type_code', object: {column: 'code'}},
-  {name: 'asset_type', object: {column: 'meaning'}},
+  {name: 'item_type_code', object: {column: 'code'}},
+  {name: 'item_type', object: {column: 'meaning'}},
   {name: 'description', object: {column: 'description'}},
 ]; // END fields
 
@@ -17,10 +17,10 @@ const fields = [
 
 const fromClause =
   ' FROM    apps.xeam_lookup_values_v\n' +
-  ' WHERE   lookup_type = \'MTL_EAM_ASSET_TYPE\'\n';
+  ' WHERE   lookup_type = \'MTL_EAM_ITEM_TYPE\'\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     code = :asset_type_code\n';
+  ' AND     code = :item_type_code\n';
 
 /*
 * Controllers
