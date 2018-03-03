@@ -10,5 +10,6 @@ router.use('/departments', require('./departments'));
 router.use('/item_types', require('./item_types'));
 router.use('/organizations', require('./organizations'));
 router.use('/query', require('./query'));
+router.use('/resources', require('./resources'));
 
 module.exports = router;
