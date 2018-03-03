@@ -18,9 +18,9 @@ const fields = [
   {name: 'capacity_units', object: {alias: 'depr', column: 'capacity_units', type: oracledb.NUMBER}},
   {name: 'available_24_hours', object: {alias: 'depr', column: 'available_24_hours'}},
   {name: 'share_resource', object: {alias: 'depr', column: 'share_resource'}},
-  {name: 'share_from_department_id', object: {alias: 'asst', column: 'department_id', type: oracledb.NUMBER}},
+  {name: 'share_from_department_id', object: {alias: 'depr', column: 'share_from_department_id', type: oracledb.NUMBER}},
   {name: 'share_from_department', object: {alias: 'dept_sf', column: 'department'}},
-  {name: 'share_from_department_description', object: {alias: 'dept_sf', column: 'description'}},
+  {name: 'share_from_department_desc', object: {alias: 'dept_sf', column: 'description'}},
 ]; // END fields
 
 /*
@@ -43,7 +43,6 @@ const fromClauseWithKey = fromClause +
 */
 
 module.exports.list = function(request, response, next) {
-  console.log('Here');
   const keys = {
     department_id: parseInt(request.params.department_id)
   };
