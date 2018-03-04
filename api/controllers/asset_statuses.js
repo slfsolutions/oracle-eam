@@ -2,13 +2,13 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'status_id', object: {column: 'instance_status_id'}},
-  {name: 'status', object: {column: 'name'}},
-  {name: 'description', object: {column: 'description'}},
+  {name: 'status_id', column: {expression: 'instance_status_id'}},
+  {name: 'status', column: {expression: 'name'}},
+  {name: 'description', column: {expression: 'description'}},
   // display order???
 ]; // END fields
 

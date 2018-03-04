@@ -2,26 +2,26 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'reso', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'orga', column: 'organization'}},
-  {name: 'organization_name', object: {alias: 'orga', column: 'organization_name'}},
-  {name: 'resource_id', object: {alias: 'reso', column: 'resource_id', type: oracledb.NUMBER}},
-  {name: 'resource_code', object: {alias: 'reso', column: 'resource_code'}},
-  {name: 'description', object: {alias: 'reso', column: 'description'}},
-  {name: 'type', object: {alias: 'reso', column: 'type'}},
-  {name: 'charge_type', object: {alias: 'reso', column: 'charge_type'}},
-  {name: 'expenditure_type', object: {alias: 'reso', column: 'expenditure_type'}},
-  {name: 'inactive_on', object: {alias: 'reso', column: 'inactive_on', type: oracledb.DATE}},
-  {name: 'uom', object: {alias: 'reso', column: 'uom'}},
-  {name: 'costed', object: {alias: 'reso', column: 'costed'}},
-  {name: 'activity', object: {alias: 'reso', column: 'activity'}},
-  {name: 'standard_rate', object: {alias: 'reso', column: 'standard_rate'}},
-  {name: 'absorption_account', object: {alias: 'reso', column: 'absorption_account'}},
-  {name: 'variance_account', object: {alias: 'reso', column: 'variance_account'}},
+  {name: 'organization_id', column: {expression: 'reso.organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'orga.organization'}},
+  {name: 'organization_name', column: {expression: 'orga.organization_name'}},
+  {name: 'resource_id', column: {expression: 'reso.resource_id', type: oracledb.NUMBER}},
+  {name: 'resource_code', column: {expression: 'reso.resource_code'}},
+  {name: 'description', column: {expression: 'reso.description'}},
+  {name: 'type', column: {expression: 'reso.type'}},
+  {name: 'charge_type', column: {expression: 'reso.charge_type'}},
+  {name: 'expenditure_type', column: {expression: 'reso.expenditure_type'}},
+  {name: 'inactive_on', column: {expression: 'reso.inactive_on', type: oracledb.DATE}},
+  {name: 'uom', column: {expression: 'reso.uom'}},
+  {name: 'costed', column: {expression: 'reso.costed'}},
+  {name: 'activity', column: {expression: 'reso.activity'}},
+  {name: 'standard_rate', column: {expression: 'reso.standard_rate'}},
+  {name: 'absorption_account', column: {expression: 'reso.absorption_account'}},
+  {name: 'variance_account', column: {expression: 'reso.variance_account'}},
 ]; // END fields
 
 /*

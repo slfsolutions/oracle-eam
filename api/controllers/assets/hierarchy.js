@@ -2,21 +2,21 @@ const oracledb = require('oracledb');
 const controller = require('../_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'ashi', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'ashi', column: 'organization'}},
-  {name: 'level_number', object: {alias: 'ashi', column: 'level_number', type: oracledb.NUMBER}},
-  {name: 'asset_id', object: {alias: 'ashi', column: 'asset_id', type: oracledb.NUMBER}},
-  {name: 'asset_type', object: {alias: 'ashi', column: 'asset_type'}},
-  {name: 'asset_number', object: {alias: 'ashi', column: 'asset_number'}},
-  {name: 'parent_asset_number', object: {alias: 'ashi', column: 'parent_asset_number'}},
-  {name: 'asset_path', object: {alias: 'ashi', column: 'asset_path'}},
-  {name: 'asset_description', object: {alias: 'ashi', column: 'asset_description'}},
-  {name: 'asset_object_id', object: {alias: 'ashi', column: 'asset_object_id', type: oracledb.NUMBER}},
-  {name: 'asset_order', object: {alias: 'ashi', column: 'asset_order', type: oracledb.NUMBER}},
+  {name: 'organization_id', column: {expression: 'organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'organization'}},
+  {name: 'level_number', column: {expression: 'level_number', type: oracledb.NUMBER}},
+  {name: 'asset_id', column: {expression: 'asset_id', type: oracledb.NUMBER}},
+  {name: 'asset_type', column: {expression: 'asset_type'}},
+  {name: 'asset_number', column: {expression: 'asset_number'}},
+  {name: 'parent_asset_number', column: {expression: 'parent_asset_number'}},
+  {name: 'asset_path', column: {expression: 'asset_path'}},
+  {name: 'asset_description', column: {expression: 'asset_description'}},
+  {name: 'asset_object_id', column: {expression: 'asset_object_id', type: oracledb.NUMBER}},
+  {name: 'asset_order', column: {expression: 'asset_order', type: oracledb.NUMBER}},
 ]; // END fields
 
 /*
@@ -24,7 +24,7 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_hierarchy_tf(:asset_id)) ashi\n' +
+  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_hierarchy_tf(:asset_id))\n' +
   ' WHERE   1 = 1\n';
 
 /*

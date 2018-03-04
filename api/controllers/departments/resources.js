@@ -2,25 +2,25 @@ const oracledb = require('oracledb');
 const controller = require('../_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'depr', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'orga', column: 'organization'}},
-  {name: 'organization_name', object: {alias: 'orga', column: 'organization_name'}},
-  {name: 'department_id', object: {alias: 'depr', column: 'department_id', type: oracledb.NUMBER}},
-  {name: 'department', object: {alias: 'dept', column: 'department'}},
-  {name: 'department_description', object: {alias: 'dept', column: 'description'}},
-  {name: 'resource_id', object: {alias: 'depr', column: 'resource_id', type: oracledb.NUMBER}},
-  {name: 'resource_code', object: {alias: 'reso', column: 'resource_code'}},
-  {name: 'resource_description', object: {alias: 'reso', column: 'description'}},
-  {name: 'capacity_units', object: {alias: 'depr', column: 'capacity_units', type: oracledb.NUMBER}},
-  {name: 'available_24_hours', object: {alias: 'depr', column: 'available_24_hours'}},
-  {name: 'share_resource', object: {alias: 'depr', column: 'share_resource'}},
-  {name: 'share_from_department_id', object: {alias: 'depr', column: 'share_from_department_id', type: oracledb.NUMBER}},
-  {name: 'share_from_department', object: {alias: 'dept_sf', column: 'department'}},
-  {name: 'share_from_department_desc', object: {alias: 'dept_sf', column: 'description'}},
+  {name: 'organization_id', column: {expression: 'depr.organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'orga.organization'}},
+  {name: 'organization_name', column: {expression: 'orga.organization_name'}},
+  {name: 'department_id', column: {expression: 'depr.department_id', type: oracledb.NUMBER}},
+  {name: 'department', column: {expression: 'dept.department'}},
+  {name: 'department_description', column: {expression: 'dept.description'}},
+  {name: 'resource_id', column: {expression: 'depr.resource_id', type: oracledb.NUMBER}},
+  {name: 'resource_code', column: {expression: 'reso.resource_code'}},
+  {name: 'resource_description', column: {expression: 'reso.description'}},
+  {name: 'capacity_units', column: {expression: 'depr.capacity_units', type: oracledb.NUMBER}},
+  {name: 'available_24_hours', column: {expression: 'depr.available_24_hours'}},
+  {name: 'share_resource', column: {expression: 'depr.share_resource'}},
+  {name: 'share_from_department_id', column: {expression: 'depr.share_from_department_id', type: oracledb.NUMBER}},
+  {name: 'share_from_department', column: {expression: 'dept_sf.department'}},
+  {name: 'share_from_department_desc', column: {expression: 'dept_sf.description'}},
 ]; // END fields
 
 /*

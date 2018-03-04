@@ -2,19 +2,19 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'category_id', object: {column: 'category_id', type: oracledb.NUMBER}},
-  {name: 'category', object: {column: 'category'}},
-  {name: 'class', object: {column: 'class'}},
-  {name: 'subclass', object: {column: 'subclass'}},
-  {name: 'description', object: {column: 'description'}},
-  {name: 'enabled_flag', object: {column: 'enabled_flag'}},
-  {name: 'inactive_on', object: {column: 'inactive_on', type: oracledb.DATE}},
-  {name: 'start_date_active', object: {column: 'start_date_active', type: oracledb.DATE}},
-  {name: 'end_date_active', object: {column: 'end_date_active', type: oracledb.DATE}},
+  {name: 'category_id', column: {expression: 'category_id', type: oracledb.NUMBER}},
+  {name: 'category', column: {expression: 'category'}},
+  {name: 'class', column: {expression: 'class'}},
+  {name: 'subclass', column: {expression: 'subclass'}},
+  {name: 'description', column: {expression: 'description'}},
+  {name: 'enabled_flag', column: {expression: 'enabled_flag'}},
+  {name: 'inactive_on', column: {expression: 'inactive_on', type: oracledb.DATE}},
+  {name: 'start_date_active', column: {expression: 'start_date_active', type: oracledb.DATE}},
+  {name: 'end_date_active', column: {expression: 'end_date_active', type: oracledb.DATE}},
 ]; // END fields
 
 /*

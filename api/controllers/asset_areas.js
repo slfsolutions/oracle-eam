@@ -2,18 +2,18 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'asar', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'orga', column: 'organization'}},
-  {name: 'organization_name', object: {alias: 'orga', column: 'organization_name'}},
-  {name: 'area_id', object: {alias: 'asar', column: 'area_id', type: oracledb.NUMBER}},
-  {name: 'area', object: {alias: 'asar', column: 'area'}},
-  {name: 'description', object: {alias: 'asar', column: 'description'}},
-  {name: 'effective_from_date', object: {alias: 'asar', column: 'effective_from_date', type: oracledb.DATE}},
-  {name: 'effective_to_date', object: {alias: 'asar', column: 'effective_to_date', type: oracledb.DATE}},
+  {name: 'organization_id', column: {expression: 'asar.organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'orga.organization'}},
+  {name: 'organization_name', column: {expression: 'orga.organization_name'}},
+  {name: 'area_id', column: {expression: 'asar.area_id', type: oracledb.NUMBER}},
+  {name: 'area', column: {expression: 'asar.area'}},
+  {name: 'description', column: {expression: 'asar.description'}},
+  {name: 'effective_from_date', column: {expression: 'asar.effective_from_date', type: oracledb.DATE}},
+  {name: 'effective_to_date', column: {expression: 'asar.effective_to_date', type: oracledb.DATE}},
 ]; // END fields
 
 /*

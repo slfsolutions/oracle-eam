@@ -5,8 +5,7 @@ function getColumnsList(fields) {
   let columnsList = [];
   for (i = 0; i < fields.length; i++)
     columnsList.push(
-      (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
-      ' AS ' + '"' + fields[i].name + '"'
+      fields[i].column.expression + ' AS ' + '"' + fields[i].name + '"'
     );
   return columnsList;
 }; // END getColumnsList
@@ -23,8 +22,7 @@ function getQueryComponents(parameters, fields) {
       for (j = 0; j < fields.length; j++)
         if (fields[j].name == includeFields[i]) {
           columnsList.push(
-            (fields[j].object.alias ? fields[j].object.alias + '.' : '') + fields[j].object.column +
-            ' AS ' + '"' + fields[j].name + '"'
+            fields[j].column.expression + ' AS ' + '"' + fields[j].name + '"'
           );
           break;
         }
@@ -39,17 +37,15 @@ function getQueryComponents(parameters, fields) {
     if (parameters[fields[i].name])
       if (parameters[fields[i].name] == 'null' || parameters[fields[i].name] == '!null')
         whereConditions.push(
-          (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
-          ' IS ' + (parameters[fields[i].name].substr(0, 1) == '!' ? 'NOT ' : '') + 'NULL'
+          fields[i].column.expression + ' IS ' +
+          (parameters[fields[i].name].substr(0, 1) == '!' ? 'NOT ' : '') + 'NULL'
         );
       else
         whereConditions.push(
-          (fields[i].object.type || oracledb.STRING) == oracledb.STRING
-            ? 'UPPER(' +
-              (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
+          (fields[i].column.type || oracledb.STRING) == oracledb.STRING
+            ? 'UPPER(' + fields[i].column.expression +
               ') LIKE UPPER(\'' + parameters[fields[i].name].replace(/\*/g, '%') + '\')'
-            : (fields[i].object.alias ? fields[i].object.alias + '.' : '') + fields[i].object.column +
-              ' = ' + parameters[fields[i].name]
+            : fields[i].column.expression + ' = ' + parameters[fields[i].name]
         );
   if (whereConditions.length > 0)
     queryComponents.whereConditions = whereConditions;
@@ -71,8 +67,7 @@ function getQueryComponents(parameters, fields) {
       for (j = 0; j < fields.length; j++)
         if (fields[j].name == sortField) {
           orderByColumns.push(
-            (fields[j].object.alias ? fields[j].object.alias + '.' : '') + fields[j].object.column +
-            (isDescending ? ' DESC' : '')
+            fields[j].column.expression + (isDescending ? ' DESC' : '')
           );
           break;
         }

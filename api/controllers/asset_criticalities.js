@@ -2,13 +2,13 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'criticality_code', object: {column: 'code'}},
-  {name: 'criticality', object: {column: 'meaning'}},
-  {name: 'description', object: {column: 'description'}},
+  {name: 'criticality_code', column: {expression: 'TO_NUMBER(code)', type: oracledb.NUMBER}},
+  {name: 'criticality', column: {expression: 'meaning'}},
+  {name: 'description', column: {expression: 'description'}},
 ]; // END fields
 
 /*
@@ -20,7 +20,7 @@ const fromClause =
   ' WHERE   lookup_type = \'MTL_EAM_ASSET_CRITICALITY\'\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     code = :criticality_code\n';
+  ' AND     TO_NUMBER(code) = :criticality_code\n';
 
 /*
 * Controllers

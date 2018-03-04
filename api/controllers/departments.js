@@ -2,17 +2,17 @@ const oracledb = require('oracledb');
 const controller = require('./_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'dept', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'orga', column: 'organization'}},
-  {name: 'organization_name', object: {alias: 'orga', column: 'organization_name'}},
-  {name: 'department_id', object: {alias: 'dept', column: 'department_id', type: oracledb.NUMBER}},
-  {name: 'department', object: {alias: 'dept', column: 'department'}},
-  {name: 'description', object: {alias: 'dept', column: 'description'}},
-  {name: 'inactive_on', object: {alias: 'dept', column: 'inactive_on', type: oracledb.DATE}},
+  {name: 'organization_id', column: {expression: 'dept.organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'orga.organization'}},
+  {name: 'organization_name', column: {expression: 'orga.organization_name'}},
+  {name: 'department_id', column: {expression: 'dept.department_id', type: oracledb.NUMBER}},
+  {name: 'department', column: {expression: 'dept.department'}},
+  {name: 'description', column: {expression: 'dept.description'}},
+  {name: 'inactive_on', column: {expression: 'dept.inactive_on', type: oracledb.DATE}},
 ]; // END fields
 
 /*

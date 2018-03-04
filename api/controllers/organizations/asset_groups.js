@@ -2,24 +2,24 @@ const oracledb = require('oracledb');
 const controller = require('../_library');
 
 /*
-* URI query field / (reporting) object mappings
+* URI query field / column mappings
 */
 
 const fields = [
-  {name: 'organization_id', object: {alias: 'asgr', column: 'organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', object: {alias: 'orga', column: 'organization'}},
-  {name: 'organization_name', object: {alias: 'orga', column: 'organization_name'}},
-  {name: 'item_type_code', object: {alias: 'asgr', column: 'item_type_code', type: oracledb.NUMBER}},
-  {name: 'item_type', object: {alias: 'asgr', column: 'item_type'}},
-  {name: 'asset_group_id', object: {alias: 'asgr', column: 'asset_group_id', type: oracledb.NUMBER}},
-  {name: 'asset_group', object: {alias: 'asgr', column: 'asset_group'}},
-  {name: 'description', object: {alias: 'asgr', column: 'description'}},
-  {name: 'template_id', object: {alias: 'asgr', column: 'template_id', type: oracledb.NUMBER}},
-  {name: 'template', object: {alias: 'asgr', column: 'template'}},
-  {name: 'serial_generation_code', object: {alias: 'asgr', column: 'serial_generation_code', type: oracledb.NUMBER}},
-  {name: 'serial_generation', object: {alias: 'asgr', column: 'serial_generation'}},
-  {name: 'starting_prefix', object: {alias: 'asgr', column: 'starting_prefix'}},
-  {name: 'starting_number', object: {alias: 'asgr', column: 'starting_number'}},
+  {name: 'organization_id', column: {expression: 'asgr.organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'orga.organization'}},
+  {name: 'organization_name', column: {expression: 'orga.organization_name'}},
+  {name: 'item_type_code', column: {expression: 'asgr.item_type_code', type: oracledb.NUMBER}},
+  {name: 'item_type', column: {expression: 'asgr.item_type'}},
+  {name: 'asset_group_id', column: {expression: 'asgr.asset_group_id', type: oracledb.NUMBER}},
+  {name: 'asset_group', column: {expression: 'asgr.asset_group'}},
+  {name: 'description', column: {expression: 'asgr.description'}},
+  {name: 'template_id', column: {expression: 'asgr.template_id', type: oracledb.NUMBER}},
+  {name: 'template', column: {expression: 'asgr.template'}},
+  {name: 'serial_generation_code', column: {expression: 'asgr.serial_generation_code', type: oracledb.NUMBER}},
+  {name: 'serial_generation', column: {expression: 'asgr.serial_generation'}},
+  {name: 'starting_prefix', column: {expression: 'asgr.starting_prefix'}},
+  {name: 'starting_number', column: {expression: 'asgr.starting_number'}},
 ]; // END fields
 
 /*

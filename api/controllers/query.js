@@ -11,8 +11,8 @@ module.exports.list = function(request, response, next) {
   for (i = 0; i < columns.length; i++) {
     field = {
       name: columns[i].name,
-      object: {
-        column: columns[i].name
+      column: {
+        expression: columns[i].name
       }
     };
     type = null;
@@ -23,7 +23,7 @@ module.exports.list = function(request, response, next) {
         type = oracledb.DATE;
     }
     if (type)
-      field.object.type = type;
+      field.column.type = type;
     fields.push(field);
   }
   const fromClause =
