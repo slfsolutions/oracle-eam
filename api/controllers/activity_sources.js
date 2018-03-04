@@ -9,6 +9,10 @@ const fields = [
   {name: 'activity_source_code', column: {expression: 'TO_NUMBER(code)', type: oracledb.NUMBER}},
   {name: 'activity_source', column: {expression: 'meaning'}},
   {name: 'description', column: {expression: 'description'}},
+  {name: 'tag', column: {expression: 'tag'}},
+  {name: 'effective_from_date', column: {expression: 'effective_from_date', type: oracledb.DATE}},
+  {name: 'effective_to_date', column: {expression: 'effective_to_date', type: oracledb.DATE}},
+  {name: 'enabled_flag', column: {expression: 'enabled_flag'}},
 ]; // END fields
 
 /*
