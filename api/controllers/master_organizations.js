@@ -22,11 +22,11 @@ const fromClause =
   '           SELECT  1\n' +
   '           FROM    apps.xeam_organizations_v orga\n' +
   '           WHERE   orga.master_organization_id = orga_master.organization_id\n' +
-  '           AND     NVL(orga.eam_enabled_flag, \'N\') = \'Y\'\n' +
+  '           AND     orga.eam_enabled_flag = \'Y\'\n' +
   '         )\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     orga_master.organization_id = :organization_id\n';
+  ' AND     orga_master.organization_id = :master_organization_id\n';
 
 /*
 * Controllers
@@ -39,7 +39,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    organization_id: parseInt(request.params.organization_id)
+    master_organization_id: parseInt(request.params.master_organization_id)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */
