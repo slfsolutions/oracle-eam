@@ -12,6 +12,7 @@ router.use('/asset_types', require('./asset_types'));
 router.use('/assets', require('./assets'));
 router.use('/departments', require('./departments'));
 router.use('/item_types', require('./item_types'));
+router.use('/master_organizations', require('./master_organizations'));
 router.use('/organizations', require('./organizations'));
 router.use('/query', require('./query'));
 router.use('/resources', require('./resources'));
