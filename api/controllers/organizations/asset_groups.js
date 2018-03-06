@@ -14,8 +14,6 @@ const fields = [
   {name: 'asset_group_id', column: {expression: 'asgr.asset_group_id', type: oracledb.NUMBER}},
   {name: 'asset_group', column: {expression: 'asgr.asset_group'}},
   {name: 'description', column: {expression: 'asgr.description'}},
-  {name: 'template_id', column: {expression: 'asgr.template_id', type: oracledb.NUMBER}},
-  {name: 'template', column: {expression: 'asgr.template'}},
   {name: 'serial_generation_code', column: {expression: 'asgr.serial_generation_code', type: oracledb.NUMBER}},
   {name: 'serial_generation', column: {expression: 'asgr.serial_generation'}},
   {name: 'starting_prefix', column: {expression: 'asgr.starting_prefix'}},

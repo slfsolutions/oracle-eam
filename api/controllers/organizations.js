@@ -21,7 +21,7 @@ const fields = [
 const fromClause =
   ' FROM    apps.xeam_organizations_v orga\n' +
   '         JOIN apps.xeam_organizations_v orga_master ON orga_master.organization_id = orga.master_organization_id\n' +
-  ' WHERE   NVL(orga.eam_enabled_flag, \'N\') = \'Y\'\n';
+  ' WHERE   orga.eam_enabled_flag = \'Y\'\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     orga.organization_id = :organization_id\n';
