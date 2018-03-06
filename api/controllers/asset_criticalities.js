@@ -37,7 +37,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    criticality_code: request.params.criticality_code
+    criticality_code: parseInt(request.params.criticality_code)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */

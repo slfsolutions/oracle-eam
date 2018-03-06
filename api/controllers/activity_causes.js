@@ -37,7 +37,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    activity_cause_code: request.params.activity_cause_code
+    activity_cause_code: parseInt(request.params.activity_cause_code)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */

@@ -12,10 +12,6 @@ const fields = [
   {name: 'master_organization_id', column: {expression: 'orga.master_organization_id', type: oracledb.NUMBER}},
   {name: 'master_organization', column: {expression: 'orga_master.organization'}},
   {name: 'master_organization_name', column: {expression: 'orga_master.organization_name'}},
-  {name: 'eam_enabled_flag', column: {expression: 'orga.eam_enabled_flag'}},
-  {name: 'maint_organization_id', column: {expression: 'orga.maint_organization_id', type: oracledb.NUMBER}},
-  {name: 'maint_organization', column: {expression: 'orga_maint.organization'}},
-  {name: 'maint_organization_name', column: {expression: 'orga_maint.organization_name'}},
 ]; // END fields
 
 /*
@@ -25,8 +21,7 @@ const fields = [
 const fromClause =
   ' FROM    apps.xeam_organizations_v orga\n' +
   '         JOIN apps.xeam_organizations_v orga_master ON orga_master.organization_id = orga.master_organization_id\n' +
-  '         LEFT JOIN apps.xeam_organizations_v orga_maint ON orga_maint.organization_id = orga.maint_organization_id\n' +
-  ' WHERE   1 = 1\n';
+  ' WHERE   NVL(orga.eam_enabled_flag, \'N\') = \'Y\'\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     orga.organization_id = :organization_id\n';

@@ -37,7 +37,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    activity_type_code: request.params.activity_type_code
+    activity_type_code: parseInt(request.params.activity_type_code)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */

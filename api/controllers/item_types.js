@@ -37,7 +37,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    asset_type_code: request.params.asset_type_code
+    item_type_code: parseInt(request.params.item_type_code)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */

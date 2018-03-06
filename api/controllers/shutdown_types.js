@@ -37,7 +37,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    shutdown_type_code: request.params.shutdown_type_code
+    shutdown_type_code: parseInt(request.params.shutdown_type_code)
   };
   controller.detail(fields, fromClauseWithKey, keys, response);
 }; /* END detail */

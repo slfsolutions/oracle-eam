@@ -97,7 +97,7 @@ const fields = [
 
 const fromClause =
   ' FROM    apps.xeam_assets_v asst\n' +
-  '         JOIN apps.xeam_organizations_v orga ON orga.organization_id = asst.organization_id AND NVL(orga.eam_enabled_flag, \'N\') = \'Y\'\n' +
+  '         JOIN apps.xeam_organizations_v orga ON orga.organization_id = asst.organization_id\n' +
   '         JOIN apps.xeam_asset_groups_v asgr ON asgr.organization_id = asst.organization_id AND asgr.asset_group_id = asst.asset_group_id\n' +
   '         LEFT JOIN apps.xeam_asset_categories_v asca ON asca.category_id = asst.category_id\n' +
   '         LEFT JOIN apps.xeam_departments_v dept ON dept.department_id = asst.owning_department_id\n' +
