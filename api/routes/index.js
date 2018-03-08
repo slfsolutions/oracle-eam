@@ -12,6 +12,7 @@ router.use('/activity_operation_attachments', require('./activity_operation_atta
 router.use('/activity_sources', require('./activity_sources'));
 router.use('/activity_types', require('./activity_types'));
 router.use('/asset_areas', require('./asset_areas'));
+router.use('/asset_attachments', require('./asset_attachments'));
 router.use('/asset_categories', require('./asset_categories'));
 router.use('/asset_criticalities', require('./asset_criticalities'));
 router.use('/asset_statuses', require('./asset_statuses'));
