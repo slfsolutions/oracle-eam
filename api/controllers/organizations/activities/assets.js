@@ -42,7 +42,7 @@ const fields = [
   {name: 'prev_scheduled_end_date', column: {expression: 'asac.prev_scheduled_end_date', type: oracledb.DATE}},
   {name: 'work_order_id', column: {expression: 'asac.work_order_id', type: oracledb.NUMBER}},
   {name: 'work_order', column: {expression: 'asac.work_order'}},
-  ]; // END fields
+]; // END fields
 
 /*
 * SQL SELECT statement
