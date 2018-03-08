@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 router.use('/activity_operations', require('./activity_operations'));
+router.use('/asset_routes', require('./asset_routes'));
 router.use('/assets', require('./assets'));
 router.use('/departments', require('./departments'));
 router.use('/master_organizations', require('./master_organizations'));
