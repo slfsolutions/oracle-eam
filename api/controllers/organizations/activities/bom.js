@@ -15,8 +15,8 @@ const fields = [
   {name: 'item_seq', column: {expression: 'acbm.item_seq', type: oracledb.NUMBER}},
   {name: 'operation_seq', column: {expression: 'acbm.operation_seq', type: oracledb.NUMBER}},
   {name: 'item_id', column: {expression: 'acbm.item_id', type: oracledb.NUMBER}},
-  {name: 'item', column: {expression: 'item.item'}},
-  {name: 'item_description', column: {expression: 'item.description'}},
+  {name: 'item', column: {expression: 'mtrl.item'}},
+  {name: 'item_description', column: {expression: 'mtrl.description'}},
   {name: 'quantity', column: {expression: 'acbm.quantity', type: oracledb.NUMBER}},
   {name: 'start_effective_date', column: {expression: 'acbm.start_effective_date', type: oracledb.DATE}},
   {name: 'end_effective_date', column: {expression: 'acbm.end_effective_date', type: oracledb.DATE}},
@@ -30,7 +30,7 @@ const fromClause =
   ' FROM    apps.xeam_activity_bom_v acbm\n' +
   '         JOIN apps.xeam_organizations_v orga ON orga.organization_id = acbm.organization_id\n' +
   '         JOIN apps.xeam_activities_v acti ON acti.organization_id = acbm.organization_id AND acti.activity_id = acbm.activity_id\n' +
-  '         JOIN apps.xeam_items_v item ON item.organization_id = acbm.organization_id AND item.item_id = acbm.item_id\n' +
+  '         JOIN apps.xeam_materials_v mtrl ON mtrl.organization_id = acbm.organization_id AND mtrl.item_id = acbm.item_id\n' +
   ' WHERE   acbm.activity_id = :activity_id\n';
 
 const fromClauseWithKey = fromClause +
