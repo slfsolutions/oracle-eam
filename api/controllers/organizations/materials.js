@@ -24,7 +24,7 @@ const fields = [
   {name: 'primary_unit_of_measure', column: {expression: 'mtrl.primary_unit_of_measure'}},
   {name: 'status_code', column: {expression: 'mtrl.status_code'}},
   {name: 'item_cost', column: {expression: 'mtrl.item_cost', type: oracledb.NUMBER}},
-  {name: 'equipment_type_code', column: {expression: 'mtrl.equipment_type_code'}},
+  {name: 'equipment_type_code', column: {expression: 'mtrl.equipment_type_code', type: oracledb.NUMBER}},
   {name: 'equipment_type', column: {expression: 'mtrl.equipment_type'}},
 ]; // END fields
 
