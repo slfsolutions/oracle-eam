@@ -31,7 +31,8 @@ const fromClause =
   '         JOIN apps.xeam_organizations_v orga ON orga.organization_id = acbm.organization_id\n' +
   '         JOIN apps.xeam_activities_v acti ON acti.organization_id = acbm.organization_id AND acti.activity_id = acbm.activity_id\n' +
   '         JOIN apps.xeam_materials_v mtrl ON mtrl.organization_id = acbm.organization_id AND mtrl.item_id = acbm.item_id\n' +
-  ' WHERE   acbm.activity_id = :activity_id\n';
+  ' WHERE   acbm.organization_id = :organization_id\n' +
+  ' AND     acbm.activity_id = :activity_id\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     acbm.item_seq = :item_seq\n';
@@ -42,6 +43,7 @@ const fromClauseWithKey = fromClause +
 
 module.exports.list = function(request, response, next) {
   const keys = {
+    organization_id: parseInt(request.params.organization_id),
     activity_id: parseInt(request.params.activity_id)
   };
   controller.list(request.query, fields, fromClause, keys, response);
@@ -49,6 +51,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
+    organization_id: parseInt(request.params.organization_id),
     activity_id: parseInt(request.params.activity_id),
     item_seq: parseInt(request.params.item_seq)
   };

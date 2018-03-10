@@ -54,7 +54,8 @@ const fromClause =
   '         JOIN apps.xeam_activities_v acti ON acti.organization_id = asac.organization_id AND acti.activity_id = asac.activity_id\n' +
   '         JOIN apps.xeam_assets_v asst ON asst.asset_id = asac.asset_id\n' +
   '         JOIN apps.xeam_departments_v dept ON dept.department_id = asac.department_id\n' +
-  ' WHERE   asac.activity_id = :activity_id\n';
+  ' WHERE   asac.organization_id = :organization_id\n' +
+  ' AND     asac.activity_id = :activity_id\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     asac.asset_id = :asset_id\n';
@@ -65,6 +66,7 @@ const fromClauseWithKey = fromClause +
 
 module.exports.list = function(request, response, next) {
   const keys = {
+    organization_id: parseInt(request.params.organization_id),
     activity_id: parseInt(request.params.activity_id)
   };
   controller.list(request.query, fields, fromClause, keys, response);
@@ -72,6 +74,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
+    organization_id: parseInt(request.params.organization_id),
     activity_id: parseInt(request.params.activity_id),
     asset_id: parseInt(request.params.asset_id)
   };
