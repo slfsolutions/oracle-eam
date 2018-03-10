@@ -51,7 +51,7 @@ const fromClause =
   '         LEFT JOIN apps.xeam_asset_categories_v asca ON asca.category_id = asst.category_id\n' +
   '         LEFT JOIN apps.xeam_departments_v dept ON dept.department_id = asst.owning_department_id\n' +
   '         LEFT JOIN apps.xeam_asset_areas_v asar ON asar.area_id = asst.area_id\n' +
-  ' WHERE   NVL(asst.network_asset_flag, \'N\') = \'Y\'\n';
+  ' WHERE   asst.network_asset_flag = \'Y\'\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     asst.asset_id = :network_asset_id\n';
