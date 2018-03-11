@@ -6,6 +6,7 @@ router.use('/assets', require('./assets'));
 router.use('/departments', require('./departments'));
 router.use('/master_organizations', require('./master_organizations'));
 router.use('/organizations', require('./organizations'));
+router.use('/pm_schedules', require('./pm_schedules'));
 
 router.use('/activity_attachments', require('./activity_attachments'));
 router.use('/activity_causes', require('./activity_causes'));
@@ -20,6 +21,10 @@ router.use('/asset_statuses', require('./asset_statuses'));
 router.use('/asset_types', require('./asset_types'));
 router.use('/item_types', require('./item_types'));
 router.use('/meters', require('./meters'));
+router.use('/pm_date_rules', require('./pm_date_rules'));
+router.use('/pm_list_dates', require('./pm_list_dates'));
+router.use('/pm_meter_rules', require('./pm_meter_rules'));
+router.use('/pm_set_names', require('./pm_set_names'));
 router.use('/query', require('./query'));
 router.use('/resources', require('./resources'));
 router.use('/shutdown_types', require('./shutdown_types'));
