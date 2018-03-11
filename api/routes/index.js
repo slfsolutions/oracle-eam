@@ -19,6 +19,7 @@ router.use('/asset_criticalities', require('./asset_criticalities'));
 router.use('/asset_statuses', require('./asset_statuses'));
 router.use('/asset_types', require('./asset_types'));
 router.use('/item_types', require('./item_types'));
+router.use('/meters', require('./meters'));
 router.use('/query', require('./query'));
 router.use('/resources', require('./resources'));
 router.use('/shutdown_types', require('./shutdown_types'));
