@@ -16,7 +16,7 @@ const fields = [
   {name: 'asset_number', column: {expression: 'asst.asset_number'}},
   {name: 'asset_description', column: {expression: 'asst.description'}},
   {name: 'priority_code', column: {expression: 'asac.priority_code'}},
-  {name: 'priority', column: {expression: 'asac.activity_type'}},
+  {name: 'priority', column: {expression: 'asac.priority'}},
   {name: 'effective_from_date', column: {expression: 'asac.effective_from_date', type: oracledb.DATE}},
   {name: 'effective_to_date', column: {expression: 'asac.effective_to_date', type: oracledb.DATE}},
   {name: 'activity_cause_code', column: {expression: 'asac.activity_cause_code'}},
