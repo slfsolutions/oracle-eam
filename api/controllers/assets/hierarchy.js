@@ -24,8 +24,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_hierarchy_tf(:asset_id))\n' +
+  ' FROM    TABLE(apps.xeam_reporting_pkg.asset_hierarchy_tf(:ancestor_asset_id))\n' +
   ' WHERE   1 = 1\n';
+
+  const fromClauseWithKey = fromClause +
+  ' AND     asset_id = :asset_id\n';
 
 /*
 * Controllers
@@ -33,7 +36,15 @@ const fromClause =
 
 module.exports.list = function(request, response, next) {
   const keys = {
-    asset_id: parseInt(request.params.asset_id)
+    ancestor_asset_id: parseInt(request.params.ancestor_asset_id)
   };
   controller.list(request.query, fields, fromClause, keys, response);
 }; /* END list */
+
+module.exports.detail = function(request, response, next) {
+  const keys = {
+    ancestor_asset_id: parseInt(request.params.ancestor_asset_id),
+    asset_id: parseInt(request.params.asset_id)
+  };
+  controller.detail(fields, fromClauseWithKey, keys, response);
+}; /* END detail */

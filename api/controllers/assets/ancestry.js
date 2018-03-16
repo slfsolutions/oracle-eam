@@ -29,6 +29,9 @@ const fromClause =
   ' FROM    TABLE(apps.xeam_reporting_pkg.asset_ancestry_tf(:asset_id))\n' +
   ' WHERE   1 = 1\n';
 
+  const fromClauseWithKey = fromClause +
+  ' AND     ancestor_asset_id = :ancestor_asset_id\n';
+
 /*
 * Controllers
 */
@@ -39,3 +42,11 @@ module.exports.list = function(request, response, next) {
   };
   controller.list(request.query, fields, fromClause, keys, response);
 }; /* END list */
+
+module.exports.detail = function(request, response, next) {
+  const keys = {
+    asset_id: parseInt(request.params.asset_id),
+    ancestor_asset_id: parseInt(request.params.ancestor_asset_id)
+  };
+  controller.detail(fields, fromClauseWithKey, keys, response);
+}; /* END detail */
