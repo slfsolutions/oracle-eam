@@ -6,11 +6,9 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'meter_id', column: {expression: 'meter_id', type: oracledb.NUMBER}},
-  {name: 'meter_name', column: {expression: 'meter_name'}},
-  {name: 'start_date_active', column: {expression: 'start_date_active', type: oracledb.DATE}},
-  {name: 'end_date_active', column: {expression: 'end_date_active', type: oracledb.DATE}},
-  {name: 'active_flag', column: {expression: 'active_flag'}},
+  {name: 'responsibility_id', column: {expression: 'resp.responsibility_id', type: oracledb.NUMBER}},
+  {name: 'name', column: {expression: 'resp.name'}},
+  {name: 'accesses_flag', column: {expression: '(SELECT CASE COUNT(1) WHEN 0 THEN \'N\' ELSE \'Y\' END FROM apps.xeam_responsibility_apis_v reap WHERE reap.responsibility_id = resp.responsibility_id)'}},
 ]; // END fields
 
 /*
@@ -18,11 +16,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.xeam_meters_v\n' +
+  ' FROM    apps.xeam_responsibilities_v resp\n' +
   ' WHERE   1 = 1\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     meter_id = :meter_id\n';
+  ' AND     resp.responsibility_id = :responsibility_id\n';
 
 /*
 * Controllers
@@ -35,7 +33,7 @@ module.exports.list = function(request, response, next) {
 
 module.exports.detail = function(request, response, next) {
   const keys = {
-    meter_id: parseInt(request.params.meter_id)
+    responsibility_id: parseInt(request.params.responsibility_id)
   };
   controller.detail(request, fields, fromClauseWithKey, keys, response);
 }; /* END detail */

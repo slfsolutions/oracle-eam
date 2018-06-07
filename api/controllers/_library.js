@@ -114,29 +114,89 @@ function getQueryStatement(queryComponents, fromClause) {
   return queryStatement;
 } // END getQueryStatement
 
-function executeStatement(statement, callback) {
-  //console.log(statement);
+function process(request, statementType, statement, response) {
   oracledb.getConnection(database.connectionAttributes, function(error, connection) {
     if (error) {
-      callback(error);
+      console.error(error.message);
       return;
     }
-    connection.execute(statement.sql, statement.bindParams, statement.options, function(error, result) {
+    const initialization = {
+      sql:
+        ' BEGIN\n' +
+        '   apps.xeam_pkg.initialize(\n' +
+        '     :user_name\n' +
+        '   , :password\n' +
+        '   , :responsibility_name\n' +
+        '   );\n' +
+        ' END;\n',
+      bindParams: {
+        user_name: request.headers['xeam-user-name'] || null,
+        password: request.headers['xeam-password'] || null,
+        responsibility_name: request.headers['xeam-responsibility-name'] || null
+      },
+      options: {}
+    };
+    connection.execute(initialization.sql, initialization.bindParams, initialization.options, function(error, result) {
       if (error) {
-        callback(error);
+        console.error(error.message);
         database.closeConnection(connection);
         return;
       }
-      callback(null, result);
-      database.closeConnection(connection);
+      connection.execute(statement.sql, statement.bindParams, statement.options, function(error, result) {
+        if (error) {
+          console.error(error.message);
+          database.closeConnection(connection);
+          return;
+        }
+        let responseBody;
+        if (statementType == 'list') {
+          responseBody = result.rows;
+        } else if (statementType == 'detail') {
+          responseBody = result.rows[0];
+        } else {
+          responseBody = {};
+          responseBody.result = result.outBinds;
+        }
+        if (statementType == 'change') {
+          if (result.outBinds.return_status == 'S') {
+            const finalization = {
+              sql: getQueryStatement(
+                {columnsList: getColumnsList(statement.finalization.fields)},
+                statement.finalization.fromClauseWithKey
+              ),
+              bindParams: statement.finalization.getKeys(statement.bindParams, result.outBinds),
+              options: {
+                outFormat: oracledb.OBJECT
+              }
+            };
+            connection.execute(finalization.sql, finalization.bindParams, finalization.options, function(error, result) {
+              if (error) {
+                console.error(error.message);
+                responseBody.data = {};
+              } else {
+                responseBody.data = result.rows[0];
+              }
+              response.json(responseBody);
+              database.closeConnection(connection);
+            });
+          } else {
+            responseBody.data = request.body;
+            response.json(responseBody);
+            database.closeConnection(connection);
+          }
+        } else {
+          response.json(responseBody);
+          database.closeConnection(connection);
+        }
+      });
     });
   });
-}; // END executeStatement
+}; // END process
 
-module.exports.list = function(parameters, fields, fromClause, keys, response) {
+module.exports.list = function(request, fields, fromClause, keys, response) {
   const statement = {
     sql: getQueryStatement(
-      getQueryComponents(parameters, fields),
+      getQueryComponents(request.query, fields),
       fromClause
     ),
     bindParams: keys,
@@ -145,16 +205,10 @@ module.exports.list = function(parameters, fields, fromClause, keys, response) {
       outFormat: oracledb.OBJECT
     }
   };
-  executeStatement(statement, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    response.json(result.rows);
-  });
+  process(request, 'list', statement, response);
 }; // END list
 
-function detail(fields, fromClauseWithKey, keys, response) {
+module.exports.detail = function(request, fields, fromClauseWithKey, keys, response) {
   const statement = {
     sql: getQueryStatement(
       {columnsList: getColumnsList(fields)},
@@ -165,32 +219,17 @@ function detail(fields, fromClauseWithKey, keys, response) {
       outFormat: oracledb.OBJECT
     }
   };
-  executeStatement(statement, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    response.json(result.rows[0]);
-  });
+  process(request, 'detail', statement, response);
 }; // END detail
 
-module.exports.detail = detail;
+module.exports.change = function(request, statement, fields, fromClauseWithKey, getKeys, response) {
+  statement.finalization = {};
+  statement.finalization.fields = fields;
+  statement.finalization.fromClauseWithKey = fromClauseWithKey;
+  statement.finalization.getKeys = getKeys;
+  process(request, 'change', statement, response);
+}; // END change
 
-module.exports.compound = function(statement, fields, fromClauseWithKey, getKeys, response) {
-  executeStatement(statement, function(error, result) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    if (result.outBinds.return_status != 'S') {
-      response.json(result.outBinds);
-      return;
-    }
-    detail(
-      fields,
-      fromClauseWithKey,
-      getKeys(statement.bindParams, result.outBinds),
-      response
-    );
-  });
-}; // END compound
+module.exports.delete = function(request, statement, response) {
+  process(request, 'delete', statement, response);
+}; // END change

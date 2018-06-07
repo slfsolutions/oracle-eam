@@ -115,27 +115,26 @@ const fromClauseWithKey = fromClause +
 
 module.exports.list = function(request, response, next) {
   const keys = {};
-  controller.list(request.query, fields, fromClause, keys, response);
+  controller.list(request, fields, fromClause, keys, response);
 }; /* END list */
 
 module.exports.detail = function(request, response, next) {
   const keys = {
     asset_id: parseInt(request.params.asset_id)
   };
-  controller.detail(fields, fromClauseWithKey, keys, response);
+  controller.detail(request, fields, fromClauseWithKey, keys, response);
 }; /* END detail */
 
 module.exports.create = function(request, response, next) {
-  const statement = {
+  let statement = {
     sql:
       ' BEGIN\n' +
-      '   apps.xeam_asset_pkg.process_asset(\n' +
-      '     p_user_id => null\n' +
-      '   , p_transaction_type => \'CREATE\'\n' +
-      '   , x_return_status => :return_status\n' +
+      '   apps.xeam_asset_pkg.create_asset(\n' +
+      '     x_return_status => :return_status\n' +
+      '   , x_msg_count => :msg_count\n' +
       '   , x_msg_data => :msg_data\n' +
-      '   , p_organization_id => :organization_id\n' +
       '   , x_asset_id => :asset_id\n' +
+      '   , p_organization_id => :organization_id\n' +
       '   , p_asset_number => :asset_number\n' +
       '   , p_description => :description\n' +
       '   , p_asset_group_id => :asset_group_id\n' +
@@ -155,13 +154,22 @@ module.exports.create = function(request, response, next) {
       '   , p_prod_equip_object_id => :prod_equip_object_id\n' +
       '   , p_fixed_asset_id => :fixed_asset_id\n' +
       '   , p_fixed_asset_synch_flag => :fixed_asset_synchronize_flag\n' +
+      '   , p_latitude => :latitude\n' +
+      '   , p_longitude => :longitude\n' +
+      '   , p_safety_type_code => :safety_type_code\n' +
+      '   , p_safety_operating_pos_code => :safety_operating_position_code\n' +
+      '   , p_safety_operating_tag_code => :safety_operating_tag_code\n' +
+      '   , p_safety_shutdown_pos_code => :safety_shutdown_position_code\n' +
+      '   , p_safety_shutdown_tag_code => :safety_shutdown_tag_code\n' +
+      '   , p_safety_lockout_device_code => :safety_lockout_device_code\n' +
       '   );\n' +
       ' END;\n',
     bindParams: {
       return_status: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+      msg_count: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
       msg_data: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+      asset_id: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
       organization_id: request.body.organization_id || null,
-      asset_id: {dir: oracledb.BIND_INOUT, type: oracledb.NUMBER},
       asset_number: request.body.asset_number || null,
       description: request.body.description || null,
       asset_group_id: request.body.asset_group_id || null,
@@ -180,7 +188,15 @@ module.exports.create = function(request, response, next) {
       location_id: request.body.location_id || null,
       prod_equip_object_id: request.body.prod_equip_object_id || null,
       fixed_asset_id: request.body.fixed_asset_id || null,
-      fixed_asset_synchronize_flag: request.body.fixed_asset_synchronize_flag || null
+      fixed_asset_synchronize_flag: request.body.fixed_asset_synchronize_flag || null,
+      latitude: request.body.latitude || null,
+      longitude: request.body.longitude || null,
+      safety_type_code: request.body.safety_type_code || null,
+      safety_operating_position_code: request.body.safety_operating_position_code || null,
+      safety_operating_tag_code: request.body.safety_operating_tag_code || null,
+      safety_shutdown_position_code: request.body.safety_shutdown_position_code || null,
+      safety_shutdown_tag_code: request.body.safety_shutdown_tag_code || null,
+      safety_lockout_device_code: request.body.safety_lockout_device_code || null
     },
     options: {}
   };
@@ -189,19 +205,18 @@ module.exports.create = function(request, response, next) {
       asset_id: result.asset_id
     };
   };
-  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.change(request, statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END create */
 
 module.exports.update = function(request, response, next) {
-  const statement = {
+  let statement = {
     sql:
       ' BEGIN\n' +
-      '   apps.xeam_asset_pkg.process_asset(\n' +
-      '     p_user_id => null\n' +
-      '   , p_transaction_type => \'UPDATE\'\n' +
-      '   , x_return_status => :return_status\n' +
+      '   apps.xeam_asset_pkg.update_asset(\n' +
+      '     x_return_status => :return_status\n' +
+      '   , x_msg_count => :msg_count\n' +
       '   , x_msg_data => :msg_data\n' +
-      '   , x_asset_id => :asset_id\n' +
+      '   , p_asset_id => :asset_id\n' +
       '   , p_asset_number => :asset_number\n' +
       '   , p_description => :description\n' +
       '   , p_asset_group_id => :asset_group_id\n' +
@@ -224,12 +239,21 @@ module.exports.update = function(request, response, next) {
       '   , p_fixed_asset_id => :fixed_asset_id\n' +
       '   , p_fixed_asset_synch_flag => :fixed_asset_synchronize_flag\n' +
       '   , p_disassoc_fixed_asset_flag => :disassociate_fixed_asset_flag\n' +
+      '   , p_latitude => :latitude\n' +
+      '   , p_longitude => :longitude\n' +
+      '   , p_safety_type_code => :safety_type_code\n' +
+      '   , p_safety_operating_pos_code => :safety_operating_position_code\n' +
+      '   , p_safety_operating_tag_code => :safety_operating_tag_code\n' +
+      '   , p_safety_shutdown_pos_code => :safety_shutdown_position_code\n' +
+      '   , p_safety_shutdown_tag_code => :safety_shutdown_tag_code\n' +
+      '   , p_safety_lockout_device_code => :safety_lockout_device_code\n' +
       '   );\n' +
       ' END;\n',
     bindParams: {
       return_status: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+      msg_count: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
       msg_data: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
-      asset_id: {val: request.params.asset_id, dir: oracledb.BIND_INOUT},
+      asset_id: parseInt(request.params.asset_id),
       asset_number: request.body.asset_number || null,
       description: request.body.description || null,
       asset_group_id: request.body.asset_group_id || null,
@@ -251,40 +275,49 @@ module.exports.update = function(request, response, next) {
       prod_equip_object_id: request.body.prod_equip_object_id || null,
       fixed_asset_id: request.body.fixed_asset_id || null,
       fixed_asset_synchronize_flag: request.body.fixed_asset_synchronize_flag || null,
-      disassociate_fixed_asset_flag: request.body.disassociate_fixed_asset_flag || null
+      disassociate_fixed_asset_flag: request.body.disassociate_fixed_asset_flag || null,
+      latitude: request.body.latitude || null,
+      longitude: request.body.longitude || null,
+      safety_type_code: request.body.safety_type_code || null,
+      safety_operating_position_code: request.body.safety_operating_position_code || null,
+      safety_operating_tag_code: request.body.safety_operating_tag_code || null,
+      safety_shutdown_position_code: request.body.safety_shutdown_position_code || null,
+      safety_shutdown_tag_code: request.body.safety_shutdown_tag_code || null,
+      safety_lockout_device_code: request.body.safety_lockout_device_code || null
     },
     options: {}
   };
   const getKeys = function(initial, result) {
     return {
-      asset_id: parseInt(initial.asset_id)
+      asset_id: initial.asset_id
     };
   };
-  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.change(request, statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END update */
 
 module.exports.deactivate = function(request, response, next) {
-  const statement = {
+  let statement = {
     sql:
       ' BEGIN\n' +
       '   apps.xeam_asset_pkg.deactivate_asset(\n' +
-      '     p_user_id => null\n' +
-      '   , x_return_status => :return_status\n' +
+      '     x_return_status => :return_status\n' +
+      '   , x_msg_count => :msg_count\n' +
       '   , x_msg_data => :msg_data\n' +
       '   , p_asset_id => :asset_id\n' +
       '   );\n' +
       ' END;\n',
     bindParams: {
-      return_status: {dir: oracledb.BIND_INOUT, type: oracledb.STRING},
-      msg_data: {dir: oracledb.BIND_INOUT, type: oracledb.STRING},
-      asset_id: request.params.asset_id
+      return_status: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+      msg_count: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
+      msg_data: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+      asset_id: parseInt(request.params.asset_id)
     },
     options: {}
   };
   const getKeys = function(initial, result) {
     return {
-      asset_id: parseInt(initial.asset_id)
+      asset_id: initial.asset_id
     };
   };
-  controller.compound(statement, fields, fromClauseWithKey, getKeys, response);
+  controller.change(request, statement, fields, fromClauseWithKey, getKeys, response);
 }; /* END deactivate */

@@ -1,12 +1,14 @@
 const router = require('express').Router();
 
 router.use('/activity_operations', require('./activity_operations'));
+router.use('/apis', require('./apis'));
 router.use('/asset_routes', require('./asset_routes'));
 router.use('/assets', require('./assets'));
 router.use('/departments', require('./departments'));
 router.use('/master_organizations', require('./master_organizations'));
 router.use('/organizations', require('./organizations'));
 router.use('/pm_schedules', require('./pm_schedules'));
+router.use('/responsibilities', require('./responsibilities'));
 
 router.use('/activity_attachments', require('./activity_attachments'));
 router.use('/activity_causes', require('./activity_causes'));

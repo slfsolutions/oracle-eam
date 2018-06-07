@@ -31,6 +31,6 @@ module.exports.list = function(request, response, next) {
     request.body.statement + '\n' +
     ' )\n' +
     ' WHERE   1 = 1\n';
-    const keys = {};
-  controller.list(request.query, fields, fromClause, keys, response);
+  const keys = {};
+  controller.list(request, fields, fromClause, keys, response);
 }; /* END list */

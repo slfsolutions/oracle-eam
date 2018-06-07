@@ -50,7 +50,7 @@ module.exports.list = function(request, response, next) {
   const keys = {
     pm_schedule_id: parseInt(request.params.pm_schedule_id)
   };
-  controller.list(request.query, fields, fromClause, keys, response);
+  controller.list(request, fields, fromClause, keys, response);
 }; /* END list */
 
 module.exports.detail = function(request, response, next) {
@@ -58,5 +58,5 @@ module.exports.detail = function(request, response, next) {
     pm_schedule_id: parseInt(request.params.pm_schedule_id),
     activity_id: parseInt(request.params.activity_id)
   };
-  controller.detail(fields, fromClauseWithKey, keys, response);
+  controller.detail(request, fields, fromClauseWithKey, keys, response);
 }; /* END detail */
