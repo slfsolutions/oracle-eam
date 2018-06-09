@@ -6,9 +6,11 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'responsibility_id', column: {expression: 'resp.responsibility_id', type: oracledb.NUMBER}},
-  {name: 'name', column: {expression: 'resp.name'}},
-  {name: 'accesses_flag', column: {expression: '(SELECT CASE COUNT(1) WHEN 0 THEN \'N\' ELSE \'Y\' END FROM apps.xeam_responsibility_apis_v reap WHERE reap.responsibility_id = resp.responsibility_id)'}},
+  {name: 'responsibility_id', column: {expression: 'responsibility_id', type: oracledb.NUMBER}},
+  {name: 'name', column: {expression: 'name'}},
+  {name: 'assigned_flag', column: {expression: 'assigned_flag'}},
+  {name: 'apis_flag', column: {expression: 'apis_flag'}},
+  {name: 'api_count', column: {expression: 'api_count', type: oracledb.NUMBER}},
 ]; // END fields
 
 /*
@@ -16,11 +18,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.xeam_responsibilities_v resp\n' +
+  ' FROM    apps.xeam_responsibilities_v\n' +
   ' WHERE   1 = 1\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     resp.responsibility_id = :responsibility_id\n';
+  ' AND     responsibility_id = :responsibility_id\n';
 
 /*
 * Controllers

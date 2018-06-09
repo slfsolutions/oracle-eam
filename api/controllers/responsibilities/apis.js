@@ -8,6 +8,7 @@ const controller = require('../_library');
 const fields = [
   {name: 'responsibility_id', column: {expression: 'reap.responsibility_id', type: oracledb.NUMBER}},
   {name: 'responsibility_name', column: {expression: 'resp.name'}},
+  {name: 'assigned_flag', column: {expression: 'resp.assigned_flag'}},
   {name: 'api_id', column: {expression: 'reap.api_id', type: oracledb.NUMBER}},
   {name: 'api_name', column: {expression: 'apis.name'}},
 ]; // END fields

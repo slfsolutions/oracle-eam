@@ -10,6 +10,7 @@ const fields = [
   {name: 'api_name', column: {expression: 'apis.name'}},
   {name: 'responsibility_id', column: {expression: 'reap.responsibility_id', type: oracledb.NUMBER}},
   {name: 'responsibility_name', column: {expression: 'resp.name'}},
+  {name: 'assigned_flag', column: {expression: 'resp.assigned_flag'}},
 ]; // END fields
 
 /*
