@@ -1,7 +1,7 @@
 const router = require('express').Router({mergeParams: true});
 const controller = require('../../controllers/responsibilities/apis');
 
-router.get('/', controller.list);
-router.get('/:api_id', controller.detail);
+router.route('/').get(controller.list).post(controller.create);
+router.route('/:api_id').get(controller.detail).delete(controller.delete);
 
 module.exports = router;
