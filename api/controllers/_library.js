@@ -114,14 +114,41 @@ function getQueryStatement(queryComponents, fromClause) {
   return queryStatement;
 } // END getQueryStatement
 
-function process(request, statementType, statement, response) {
-  oracledb.getConnection(database.connectionAttributes, function(error, connection) {
-    if (error) {
-      console.error(error.message);
-      return;
-    }
-    const initialization = {
-      sql:
+function getConnection() {
+  return new Promise((resolve, reject) => {
+    oracledb.getConnection(database.connectionAttributes, function(error, connection) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(connection);
+      }
+    });
+  });
+}; // END getConnection
+
+function execute(connection, statement) {
+  return new Promise((resolve, reject) => {
+    connection.execute(statement.sql, statement.bindParams || {}, statement.options || {}, function(error, result) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}; // END execute
+
+async function process(request, statementType, statement, response) {
+  let connection;
+  try {
+    // Establish database connection
+    connection = await getConnection();
+    // Statement initialization ie. Set accessibility context
+    let result;
+    result = await execute(
+      connection
+    , {
+        sql:
         ' BEGIN\n' +
         '   apps.xeam_pkg.initialize(\n' +
         '     :user_name\n' +
@@ -129,68 +156,52 @@ function process(request, statementType, statement, response) {
         '   , :responsibility_name\n' +
         '   );\n' +
         ' END;\n',
-      bindParams: {
-        user_name: request.headers['xeam-user-name'] || null,
-        password: request.headers['xeam-password'] || null,
-        responsibility_name: request.headers['xeam-responsibility-name'] || null
-      },
-      options: {}
-    };
-    connection.execute(initialization.sql, initialization.bindParams, initialization.options, function(error, result) {
-      if (error) {
-        console.error(error.message);
-        database.closeConnection(connection);
-        return;
+        bindParams: {
+          user_name: request.headers['xeam-user-name'] || null,
+          password: request.headers['xeam-password'] || null,
+          responsibility_name: request.headers['xeam-responsibility-name'] || null
+        }
       }
-      connection.execute(statement.sql, statement.bindParams, statement.options, function(error, result) {
-        if (error) {
-          console.error(error.message);
-          database.closeConnection(connection);
-          return;
-        }
-        let responseBody;
-        if (statementType == 'list') {
-          responseBody = result.rows;
-        } else if (statementType == 'detail') {
-          responseBody = result.rows[0];
-        } else {
-          responseBody = {};
-          responseBody.result = result.outBinds;
-        }
-        if (statementType == 'change') {
-          if (result.outBinds.return_status == 'S') {
-            const finalization = {
+    );
+    // Statement execution
+    result = await execute(connection, statement);
+    let responseBody;
+    if (statementType == 'list') {
+      responseBody = result.rows;
+    } else if (statementType == 'detail') {
+      responseBody = result.rows[0];
+    } else { // Is a 'change' or 'delete' statement
+      responseBody = {};
+      responseBody.result = result.outBinds;
+      if (result.outBinds.return_status == 'S') { // Statement was successful
+        if (statementType == 'change') { // Statement post-processing
+          result = await execute(
+            connection
+          , {
               sql: getQueryStatement(
-                {columnsList: getColumnsList(statement.finalization.fields)},
-                statement.finalization.fromClauseWithKey
+                {columnsList: getColumnsList(statement.post.fields)},
+                statement.post.fromClauseWithKey
               ),
-              bindParams: statement.finalization.getKeys(statement.bindParams, result.outBinds),
+              bindParams: statement.post.getKeys(statement.bindParams, result.outBinds),
               options: {
                 outFormat: oracledb.OBJECT
               }
-            };
-            connection.execute(finalization.sql, finalization.bindParams, finalization.options, function(error, result) {
-              if (error) {
-                console.error(error.message);
-                responseBody.data = {};
-              } else {
-                responseBody.data = result.rows[0];
-              }
-              response.json(responseBody);
-              database.closeConnection(connection);
-            });
-          } else {
-            responseBody.data = request.body;
-            response.json(responseBody);
-            database.closeConnection(connection);
-          }
-        } else {
-          response.json(responseBody);
-          database.closeConnection(connection);
+            }
+          );
+          responseBody.data = result.rows[0];
         }
-      });
-    });
-  });
+        result = await execute(connection, {sql: 'COMMIT'});
+      } else { // result.outBinds.return_status != 'S' ie. Statement was unsuccessful
+        responseBody.data = request.body;
+      }
+    }
+    response.json(responseBody);
+  } catch (error) {
+    response.sendStatus(500);
+    console.error(error.message);
+  }
+  // Close database connection (if applicable)
+  if (connection) database.closeConnection(connection);
 }; // END process
 
 module.exports.list = function(request, fields, fromClause, keys, response) {
@@ -223,13 +234,13 @@ module.exports.detail = function(request, fields, fromClauseWithKey, keys, respo
 }; // END detail
 
 module.exports.change = function(request, statement, fields, fromClauseWithKey, getKeys, response) {
-  statement.finalization = {};
-  statement.finalization.fields = fields;
-  statement.finalization.fromClauseWithKey = fromClauseWithKey;
-  statement.finalization.getKeys = getKeys;
+  statement.post = {}; // post-process
+  statement.post.fields = fields;
+  statement.post.fromClauseWithKey = fromClauseWithKey;
+  statement.post.getKeys = getKeys;
   process(request, 'change', statement, response);
 }; // END change
 
 module.exports.delete = function(request, statement, response) {
   process(request, 'delete', statement, response);
-}; // END change
+}; // END delete

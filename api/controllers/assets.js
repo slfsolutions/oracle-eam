@@ -197,8 +197,7 @@ module.exports.create = function(request, response, next) {
       safety_shutdown_position_code: request.body.safety_shutdown_position_code || null,
       safety_shutdown_tag_code: request.body.safety_shutdown_tag_code || null,
       safety_lockout_device_code: request.body.safety_lockout_device_code || null
-    },
-    options: {}
+    }
   };
   const getKeys = function(initial, result) {
     return {
@@ -284,8 +283,7 @@ module.exports.update = function(request, response, next) {
       safety_shutdown_position_code: request.body.safety_shutdown_position_code || null,
       safety_shutdown_tag_code: request.body.safety_shutdown_tag_code || null,
       safety_lockout_device_code: request.body.safety_lockout_device_code || null
-    },
-    options: {}
+    }
   };
   const getKeys = function(initial, result) {
     return {
@@ -311,8 +309,7 @@ module.exports.deactivate = function(request, response, next) {
       msg_count: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
       msg_data: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
       asset_id: parseInt(request.params.asset_id)
-    },
-    options: {}
+    }
   };
   const getKeys = function(initial, result) {
     return {
