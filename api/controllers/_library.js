@@ -174,7 +174,7 @@ async function process(request, statementType, statement, response) {
       responseBody = {};
       responseBody.result = result.outBinds;
       if (result.outBinds.return_status == 'S') { // Statement was successful
-        if (statementType == 'change') { // Return changed (created/updated) 'detail' data
+        if (statementType == 'change') { // Retrieve changed (created/updated) 'detail' data
           result = await execute(
             connection
           , {
@@ -191,8 +191,8 @@ async function process(request, statementType, statement, response) {
           responseBody.data = result.rows[0]; // Return 'detail' data
         }
         result = await execute(connection, {sql: 'COMMIT'});
-      } else { // Statement was unsuccessful ie. result.outBinds.return_status != 'S'; Return sent data
-        responseBody.data = request.body;
+      } else { // Statement was unsuccessful ie. result.outBinds.return_status != 'S'
+        responseBody.data = request.body; // Return sent data
       }
     }
     response.json(responseBody);
