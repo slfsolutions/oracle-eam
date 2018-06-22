@@ -174,30 +174,30 @@ async function process(request, statementType, statement, response) {
       responseBody = {};
       responseBody.result = result.outBinds;
       if (result.outBinds.return_status == 'S') { // Statement was successful
-        if (statementType == 'change') { // Statement post-processing
+        if (statementType == 'change') { // Return changed (created/updated) 'detail' data
           result = await execute(
             connection
           , {
               sql: getQueryStatement(
-                {columnsList: getColumnsList(statement.post.fields)},
-                statement.post.fromClauseWithKey
+                {columnsList: getColumnsList(statement.detail.fields)},
+                statement.detail.fromClauseWithKey
               ),
-              bindParams: statement.post.getKeys(statement.bindParams, result.outBinds),
+              bindParams: statement.detail.getKeys(statement.bindParams, result.outBinds),
               options: {
                 outFormat: oracledb.OBJECT
               }
             }
           );
-          responseBody.data = result.rows[0];
+          responseBody.data = result.rows[0]; // Return 'detail' data
         }
         result = await execute(connection, {sql: 'COMMIT'});
-      } else { // result.outBinds.return_status != 'S' ie. Statement was unsuccessful
+      } else { // Statement was unsuccessful ie. result.outBinds.return_status != 'S'; Return sent data
         responseBody.data = request.body;
       }
     }
     response.json(responseBody);
   } catch (error) {
-    response.sendStatus(500);
+    response.status(500).json({error: error.message});
     console.error(error.message);
   }
   // Close database connection (if applicable)
@@ -234,10 +234,10 @@ module.exports.detail = function(request, fields, fromClauseWithKey, keys, respo
 }; // END detail
 
 module.exports.change = function(request, statement, fields, fromClauseWithKey, getKeys, response) {
-  statement.post = {}; // post-process
-  statement.post.fields = fields;
-  statement.post.fromClauseWithKey = fromClauseWithKey;
-  statement.post.getKeys = getKeys;
+  statement.detail = {};
+  statement.detail.fields = fields;
+  statement.detail.fromClauseWithKey = fromClauseWithKey;
+  statement.detail.getKeys = getKeys;
   process(request, 'change', statement, response);
 }; // END change
 
