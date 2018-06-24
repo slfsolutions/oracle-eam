@@ -114,38 +114,14 @@ function getQueryStatement(queryComponents, fromClause) {
   return queryStatement;
 } // END getQueryStatement
 
-function getConnection() {
-  return new Promise((resolve, reject) => {
-    oracledb.getConnection(database.connectionAttributes, function(error, connection) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(connection);
-      }
-    });
-  });
-}; // END getConnection
-
-function execute(connection, statement) {
-  return new Promise((resolve, reject) => {
-    connection.execute(statement.sql, statement.bindParams || {}, statement.options || {}, function(error, result) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(result);
-      }
-    });
-  });
-}; // END execute
-
 async function process(request, statementType, statement, response) {
   let connection;
   try {
     // Establish database connection
-    connection = await getConnection();
+    connection = await database.getConnection();
     // Statement initialization ie. Set accessibility context
     let result;
-    result = await execute(
+    result = await database.execute(
       connection
     , {
         sql:
@@ -164,7 +140,7 @@ async function process(request, statementType, statement, response) {
       }
     );
     // Statement execution
-    result = await execute(connection, statement);
+    result = await database.execute(connection, statement);
     let responseBody;
     if (statementType == 'list') {
       responseBody = result.rows;
@@ -175,7 +151,7 @@ async function process(request, statementType, statement, response) {
       responseBody.result = result.outBinds;
       if (result.outBinds.return_status == 'S') { // Statement was successful
         if (statementType == 'change') { // Retrieve changed (created/updated) 'detail' data
-          result = await execute(
+          result = await database.execute(
             connection
           , {
               sql: getQueryStatement(
@@ -190,18 +166,18 @@ async function process(request, statementType, statement, response) {
           );
           responseBody.data = result.rows[0]; // Return 'detail' data
         }
-        result = await execute(connection, {sql: 'COMMIT'});
+        result = await database.execute(connection, {sql: 'COMMIT'});
       } else { // Statement was unsuccessful ie. result.outBinds.return_status != 'S'
         responseBody.data = request.body; // Return sent data
       }
     }
     response.json(responseBody);
+    result = await database.close(connection);
   } catch (error) {
     response.status(500).json({error: error.message});
     console.error(error.message);
+    if (connection) result = await database.close(connection);
   }
-  // Close database connection (if applicable)
-  if (connection) database.closeConnection(connection);
 }; // END process
 
 module.exports.list = function(request, fields, fromClause, keys, response) {
