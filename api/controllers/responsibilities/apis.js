@@ -6,10 +6,9 @@ const controller = require('../_library');
 */
 
 const fields = [
-  {name: 'responsibility_id', column: {expression: 'reap.responsibility_id', type: oracledb.NUMBER}},
+  {name: 'responsibility_id', column: {expression: 'apre.responsibility_id', type: oracledb.NUMBER}},
   {name: 'responsibility_name', column: {expression: 'resp.name'}},
-  {name: 'assigned_flag', column: {expression: 'resp.assigned_flag'}},
-  {name: 'api_id', column: {expression: 'reap.api_id', type: oracledb.NUMBER}},
+  {name: 'api_id', column: {expression: 'apre.api_id', type: oracledb.NUMBER}},
   {name: 'api_name', column: {expression: 'apis.name'}},
 ]; // END fields
 
@@ -18,13 +17,13 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.xeam_responsibility_apis_v reap\n' +
-  '         JOIN apps.xeam_responsibilities_v resp ON resp.responsibility_id = reap.responsibility_id\n' +
-  '         JOIN apps.xeam_apis_v apis ON apis.api_id = reap.api_id\n' +
-  ' WHERE   reap.responsibility_id = :responsibility_id\n';
+  ' FROM    apps.xeam_api_responsibilities_v apre\n' +
+  '         JOIN apps.xeam_responsibilities_v resp ON resp.responsibility_id = apre.responsibility_id\n' +
+  '         JOIN apps.xeam_apis_v apis ON apis.api_id = apre.api_id\n' +
+  ' WHERE   apre.responsibility_id = :responsibility_id\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     reap.api_id = :api_id\n';
+  ' AND     apre.api_id = :api_id\n';
 
 /*
 * Controllers
@@ -49,7 +48,7 @@ module.exports.create = function(request, response, next) {
   let statement = {
     sql:
       ' BEGIN\n' +
-      '   apps.xeam_responsibility_api_pkg.create_responsibility_api(\n' +
+      '   apps.xeam_api_responsibility_pkg.create_api_responsibility(\n' +
       '     x_return_status => :return_status\n' +
       '   , x_msg_count => :msg_count\n' +
       '   , x_msg_data => :msg_data\n' +
@@ -79,7 +78,7 @@ module.exports.delete = function(request, response, next) {
   let statement = {
     sql:
       ' BEGIN\n' +
-      '   apps.xeam_responsibility_api_pkg.delete_responsibility_api(\n' +
+      '   apps.xeam_api_responsibility_pkg.delete_api_responsibility(\n' +
       '     x_return_status => :return_status\n' +
       '   , x_msg_count => :msg_count\n' +
       '   , x_msg_data => :msg_data\n' +

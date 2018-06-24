@@ -8,7 +8,6 @@ const controller = require('./_library');
 const fields = [
   {name: 'api_id', column: {expression: 'api_id', type: oracledb.NUMBER}},
   {name: 'name', column: {expression: 'name'}},
-  {name: 'accessible_flag', column: {expression: 'accessible_flag'}},
   {name: 'responsibilities_flag', column: {expression: 'responsibilities_flag'}},
   {name: 'responsibility_count', column: {expression: 'responsibility_count', type: oracledb.NUMBER}},
 ]; // END fields
