@@ -3,10 +3,10 @@ const environment = process.env.NODE_ENV || 'development';
 const config = require('./config')[environment].database;
 
 let connectionAttributes = {
-    user: config.username,
-    password: config.password,
-    connectString: config.hostname + ':' + config.port + '/' + config.serviceName
-  };
+  user: config.username,
+  password: config.password,
+  connectString: config.hostname + ':' + config.port + '/' + config.serviceName
+};
 
 module.exports.getConnection = function() {
   return new Promise((resolve, reject) => {
