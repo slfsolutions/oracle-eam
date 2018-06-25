@@ -133,9 +133,9 @@ async function process(request, statementType, statement, response) {
         '   );\n' +
         ' END;\n',
         bindParams: {
-          user_name: request.headers['xeam-user-name'] || null,
-          password: request.headers['xeam-password'] || null,
-          responsibility_name: request.headers['xeam-responsibility-name'] || null
+          user_name: request.headers['x-xeam-user-name'] || null,
+          password: request.headers['x-xeam-password'] || null,
+          responsibility_name: request.headers['x-xeam-responsibility-name'] || null
         }
       }
     );
@@ -145,7 +145,7 @@ async function process(request, statementType, statement, response) {
     if (statementType == 'list') {
       responseBody = result.rows;
     } else if (statementType == 'detail') {
-      responseBody = result.rows[0];
+      responseBody = result.rows[0] || {};
     } else { // Is a 'change' or 'delete' statement
       responseBody = {};
       responseBody.result = result.outBinds;
