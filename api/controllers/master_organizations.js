@@ -6,9 +6,9 @@ const controller = require('./_library');
 */
 
 const fields = [
-  {name: 'organization_id', column: {expression: 'orga_master.organization_id', type: oracledb.NUMBER}},
-  {name: 'organization', column: {expression: 'orga_master.organization'}},
-  {name: 'organization_name', column: {expression: 'orga_master.organization_name'}},
+  {name: 'organization_id', column: {expression: 'organization_id', type: oracledb.NUMBER}},
+  {name: 'organization', column: {expression: 'organization'}},
+  {name: 'organization_name', column: {expression: 'organization_name'}},
 ]; // END fields
 
 /*
@@ -16,17 +16,11 @@ const fields = [
 */
 
 const fromClause =
-  ' FROM    apps.xeam_organizations_v orga_master\n' +
-  ' WHERE   orga_master.organization_id = orga_master.master_organization_id\n' +
-  ' AND     EXISTS (\n' +
-  '           SELECT  1\n' +
-  '           FROM    apps.xeam_organizations_v orga\n' +
-  '           WHERE   orga.master_organization_id = orga_master.organization_id\n' +
-  '           AND     orga.eam_enabled_flag = \'Y\'\n' +
-  '         )\n';
+  ' FROM    apps.xeam_organizations_v\n' +
+  ' WHERE   organization_id = master_organization_id\n';
 
 const fromClauseWithKey = fromClause +
-  ' AND     orga_master.organization_id = :master_organization_id\n';
+  ' AND     organization_id = :master_organization_id\n';
 
 /*
 * Controllers
