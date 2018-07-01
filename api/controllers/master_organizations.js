@@ -17,7 +17,7 @@ const fields = [
 
 const fromClause =
   ' FROM    apps.xeam_organizations_v\n' +
-  ' WHERE   organization_id = master_organization_id\n';
+  ' WHERE   master_organization_id IS NULL\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     organization_id = :master_organization_id\n';

@@ -19,8 +19,7 @@ const fields = [
 const fromClause =
   ' FROM    apps.xeam_organizations_v orga\n' +
   '         LEFT JOIN apps.xeam_activities_v acti ON acti.organization_id = orga.organization_id AND acti.activity_id = :activity_id\n' +
-  ' WHERE   orga.master_organization_id = :master_organization_id\n' +
-  ' AND     orga.eam_enabled_flag = \'Y\'\n';
+  ' WHERE   orga.master_organization_id = :master_organization_id\n';
 
 const fromClauseWithKey = fromClause +
   ' AND     orga.organization_id = :organization_id\n';
